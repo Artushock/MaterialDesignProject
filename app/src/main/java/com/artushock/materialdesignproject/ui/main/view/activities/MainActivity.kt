@@ -1,8 +1,9 @@
-package com.artushock.materialdesignproject
+package com.artushock.materialdesignproject.ui.main.view.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.artushock.materialdesignproject.ui.main.MainFragment
+import com.artushock.materialdesignproject.R
+import com.artushock.materialdesignproject.ui.main.view.fragments.MainFragment
 
 class MainActivity : AppCompatActivity() {
 
