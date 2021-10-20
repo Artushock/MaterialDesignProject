@@ -1,6 +1,5 @@
 package com.artushock.materialdesignproject.ui.main.view.fragments
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -56,22 +55,27 @@ class MainFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.bottom_app_bar_menu, menu)
+        inflater.inflate(R.menu.menu_bottom_app_bar, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId){
+        when (item.itemId) {
             R.id.app_bar_fav -> {
                 Toast.makeText(context, "Favorite", Toast.LENGTH_SHORT).show()
             }
             R.id.app_bar_settings -> {
                 Toast.makeText(context, "Settings", Toast.LENGTH_SHORT).show()
             }
+            android.R.id.home -> {
+                activity?.let {
+                    BottomNavigationDrawerFragment().show(it.supportFragmentManager, "tag")
+                }
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun setBottomAppBar(){
+    private fun setBottomAppBar() {
         val context = activity as MainActivity
         context.setSupportActionBar(binding.bottomAppBar)
         setHasOptionsMenu(true)
