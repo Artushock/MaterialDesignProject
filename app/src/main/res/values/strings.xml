@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">MaterialDesignProject</string>
     <string name="photo_of_the_day">Photo of the day</string>
+    <string name="search_wiki">Search Wiki</string>
 </resources>

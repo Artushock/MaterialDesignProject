@@ -3,7 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/main_fragment.xml" value="0.16" />
+        <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/bottom_sheet_layout.xml" value="0.6" />
+        <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/main_fragment.xml" value="0.264" />
       </map>
     </option>
   </component>
