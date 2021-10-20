@@ -1,19 +1,20 @@
 package com.artushock.materialdesignproject.ui.main.view.fragments
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import coil.load
+import com.artushock.materialdesignproject.R
 import com.artushock.materialdesignproject.data.model.PictureOfTheDayData
 import com.artushock.materialdesignproject.databinding.MainFragmentBinding
+import com.artushock.materialdesignproject.ui.main.view.activities.MainActivity
 import com.artushock.materialdesignproject.ui.main.viewmodel.MainViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
@@ -50,6 +51,30 @@ class MainFragment : Fragment() {
         setBottomSheetBehavior(binding.includedBottomSheet.bottomSheetContainer)
         initViewModel()
         initTextInputLayout()
+        setBottomAppBar()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.bottom_app_bar_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId){
+            R.id.app_bar_fav -> {
+                Toast.makeText(context, "Favorite", Toast.LENGTH_SHORT).show()
+            }
+            R.id.app_bar_settings -> {
+                Toast.makeText(context, "Settings", Toast.LENGTH_SHORT).show()
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun setBottomAppBar(){
+        val context = activity as MainActivity
+        context.setSupportActionBar(binding.bottomAppBar)
+        setHasOptionsMenu(true)
     }
 
     private fun initTextInputLayout() {

@@ -3,4 +3,6 @@
     <string name="photo_of_the_day">Photo of the day</string>
     <string name="search_wiki">Search Wiki</string>
     <string name="astronomy_picture_of_the_day">Astronomy Picture of the Day</string>
+    <string name="favorite">Favorite</string>
+    <string name="settings">Settings</string>
 </resources>
