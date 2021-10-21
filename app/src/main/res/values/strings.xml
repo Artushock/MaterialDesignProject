@@ -7,4 +7,25 @@
     <string name="settings">Settings</string>
     <string name="_1">На экран 1</string>
     <string name="_2">На экран 2</string>
+    <string name="search">Search</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="_default">Default</string>
+    <string name="_entry">Entry</string>
+    <string name="_choice">Choice</string>
+    <string name="_action">Action</string>
+    <string name="_filter">Filter</string>
+    <string name="_background_color">Background color</string>
+    <string name="_ripple_color">Ripple color</string>
+    <string name="_chip_icon">Chip icon</string>
+    <string name="_chip">Chip</string>
+    <string name="_group">Group</string>
+    <string name="_close_icon_listener">Close icon listener</string>
+    <string name="_scroll">scroll</string>
+    <string name="_horizontal">horizontal</string>
+    <string name="_a">a</string>
+    <string name="_add">add</string>
+    <string name="_line">line</string>
+    <string name="_single">single</string>
+    <string name="_in">in</string>
 </resources>

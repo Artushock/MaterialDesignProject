@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import coil.load
@@ -15,6 +16,7 @@ import com.artushock.materialdesignproject.data.model.PictureOfTheDayData
 import com.artushock.materialdesignproject.databinding.MainFragmentBinding
 import com.artushock.materialdesignproject.ui.main.view.activities.MainActivity
 import com.artushock.materialdesignproject.ui.main.viewmodel.MainViewModel
+import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 class MainFragment : Fragment() {
@@ -25,6 +27,8 @@ class MainFragment : Fragment() {
     private val binding get() = _binding!!
 
     companion object {
+        private var isMain = true
+
         fun newInstance() = MainFragment()
     }
 
@@ -64,7 +68,8 @@ class MainFragment : Fragment() {
                 Toast.makeText(context, "Favorite", Toast.LENGTH_SHORT).show()
             }
             R.id.app_bar_settings -> {
-                Toast.makeText(context, "Settings", Toast.LENGTH_SHORT).show()
+                activity?.supportFragmentManager?.beginTransaction()
+                    ?.replace(R.id.container, ChipsFragment())?.addToBackStack(null)?.commit()
             }
             android.R.id.home -> {
                 activity?.let {
@@ -79,6 +84,38 @@ class MainFragment : Fragment() {
         val context = activity as MainActivity
         context.setSupportActionBar(binding.bottomAppBar)
         setHasOptionsMenu(true)
+
+        with(binding) {
+            fab.setOnClickListener {
+                if (isMain) {
+                    isMain = false
+                    bottomAppBar.navigationIcon = null
+                    bottomAppBar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_END
+                    fab.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            context,
+                            R.drawable.ic_baseline_arrow_back_24
+                        )
+                    )
+                    bottomAppBar.replaceMenu(R.menu.menu_bottom_bar)
+                } else {
+                    isMain = true
+                    bottomAppBar.navigationIcon =
+                        ContextCompat.getDrawable(
+                            context,
+                            R.drawable.ic_outline_insert_emoticon_24
+                        )
+                    bottomAppBar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
+                    fab.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            context,
+                            R.drawable.ic_baseline_arrow_forward_24
+                        )
+                    )
+                    bottomAppBar.replaceMenu(R.menu.menu_bottom_app_bar)
+                }
+            }
+        }
     }
 
     private fun initTextInputLayout() {
