@@ -2,10 +2,12 @@ package com.artushock.materialdesignproject.ui.main.view.fragments
 
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -49,12 +51,31 @@ class MainFragment : Fragment() {
         _binding = null
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setBottomSheetBehavior(binding.includedBottomSheet.bottomSheetContainer)
-        initViewModel()
+
         initTextInputLayout()
         setBottomAppBar()
+        initViewModel()
+        initChips()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun initChips() {
+        with(binding) {
+            chipToday.setOnClickListener {
+                viewModel.getCurrentDayData().observe(viewLifecycleOwner, { renderData(it) })
+            }
+            chipYesterday.setOnClickListener {
+                viewModel.getYesterdayData().observe(viewLifecycleOwner, { renderData(it) })
+            }
+            chipTheDayBeforeYesterday.setOnClickListener {
+                viewModel.getDayBeforeYesterdayData()
+                    .observe(viewLifecycleOwner, { renderData(it) })
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -132,7 +153,7 @@ class MainFragment : Fragment() {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
 
         binding.includedBottomSheet.bottomSheetDescriptionHeader.text =
-            "Information is waited... "
+            getString(R.string._info_waited)
 
         bottomSheetBehavior.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
@@ -166,13 +187,17 @@ class MainFragment : Fragment() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun initViewModel() {
-        viewModel.getData().observe(viewLifecycleOwner, { renderData(it) })
+        viewModel.getCurrentDayData().observe(viewLifecycleOwner, { renderData(it) })
     }
 
     private fun renderData(data: PictureOfTheDayData?) {
         when (data) {
             is PictureOfTheDayData.Success -> {
+                binding.imageView.visibility = View.VISIBLE
+                binding.progressBar.visibility = View.GONE
+
                 val serverResponseData = data.serverResponseData
                 setPhotoDescriptionIntoBottomSheet(
                     serverResponseData.title,
@@ -186,6 +211,13 @@ class MainFragment : Fragment() {
                         lifecycle(this@MainFragment)
                     }
                 }
+            }
+            is PictureOfTheDayData.Loading -> {
+                binding.imageView.visibility = View.GONE
+                binding.progressBar.visibility = View.VISIBLE
+            }
+            is PictureOfTheDayData.Error -> {
+                throw data.error
             }
         }
     }

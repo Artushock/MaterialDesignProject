@@ -1,5 +1,7 @@
 package com.artushock.materialdesignproject.ui.main.viewmodel
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,43 +12,66 @@ import com.artushock.materialdesignproject.data.model.PictureOfTheDayData
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class MainViewModel(
-    private val liveDataToObserve: MutableLiveData<PictureOfTheDayData> = MutableLiveData(),
+    private val currentDayLiveDataToObserve: MutableLiveData<PictureOfTheDayData> = MutableLiveData(),
+    private val yesterdayDayDataToObserve: MutableLiveData<PictureOfTheDayData> = MutableLiveData(),
+    private val theDayBeforeYesterdayDayDataToObserve: MutableLiveData<PictureOfTheDayData> = MutableLiveData(),
     private val retrofitImpl: RetrofitImpl = RetrofitImpl()
 ) : ViewModel() {
 
-    fun getData(): LiveData<PictureOfTheDayData> {
-        sendServerRequest()
-        return liveDataToObserve
+    private val apiKey = BuildConfig.NASA_API_KEY
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getCurrentDayData(): LiveData<PictureOfTheDayData> {
+        val date = LocalDate.now().format(DateTimeFormatter.ISO_DATE)
+        sendServerRequest(currentDayLiveDataToObserve, date)
+        return currentDayLiveDataToObserve
     }
 
-    private fun sendServerRequest() {
-        liveDataToObserve.value = PictureOfTheDayData.Loading(null)
-        val apiKey = BuildConfig.NASA_API_KEY
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getYesterdayData(): LiveData<PictureOfTheDayData> {
+        val date = LocalDate.now().minusDays(1).format(DateTimeFormatter.ISO_DATE)
+        sendServerRequest(yesterdayDayDataToObserve, date)
+        return yesterdayDayDataToObserve
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getDayBeforeYesterdayData(): LiveData<PictureOfTheDayData> {
+        val date = LocalDate.now().minusDays(2).format(DateTimeFormatter.ISO_DATE)
+        sendServerRequest(theDayBeforeYesterdayDayDataToObserve, date)
+        return theDayBeforeYesterdayDayDataToObserve
+    }
+
+    private fun sendServerRequest(liveData: MutableLiveData<PictureOfTheDayData>, date: String) {
+        liveData.value = PictureOfTheDayData.Loading(null)
         if (apiKey.isBlank()) {
             PictureOfTheDayData.Error(Throwable("You need API key"))
         } else {
-            retrofitImpl.getRetrofitImpl().getPictureOfTheDay(apiKey)
+            retrofitImpl.getRetrofitImpl().getPictureOfTheDayByDate(date , apiKey)
                 .enqueue(object : Callback<PictureOfTheDayDTO> {
                     override fun onResponse(
                         call: Call<PictureOfTheDayDTO>,
                         response: Response<PictureOfTheDayDTO>
                     ) {
-                        if (response.isSuccessful && response.body() != null){
-                            liveDataToObserve.value = PictureOfTheDayData.Success(response.body()!!)
+                        if (response.isSuccessful && response.body() != null) {
+                            liveData.value = PictureOfTheDayData.Success(response.body()!!)
                         } else {
                             val message = response.message()
-                            if (message.isNullOrEmpty()){
-                                liveDataToObserve.value = PictureOfTheDayData.Error(Throwable("Undefined"))
+                            if (message.isNullOrEmpty()) {
+                                liveData.value =
+                                    PictureOfTheDayData.Error(Throwable("Undefined"))
                             } else {
-                                liveDataToObserve.value = PictureOfTheDayData.Error(Throwable(message))
+                                liveData.value =
+                                    PictureOfTheDayData.Error(Throwable(message))
                             }
                         }
                     }
 
                     override fun onFailure(call: Call<PictureOfTheDayDTO>, t: Throwable) {
-                        liveDataToObserve.value = PictureOfTheDayData.Error(t)
+                        currentDayLiveDataToObserve.value = PictureOfTheDayData.Error(t)
                     }
 
                 })

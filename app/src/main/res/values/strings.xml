@@ -28,4 +28,8 @@
     <string name="_line">line</string>
     <string name="_single">single</string>
     <string name="_in">in</string>
+    <string name="_today">Today</string>
+    <string name="_yesterday">Yesterday</string>
+    <string name="_the_day_before_yesterday">The Day Before Yesterday</string>
+    <string name="_info_waited">Information is waited…</string>
 </resources>

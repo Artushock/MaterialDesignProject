@@ -27,7 +27,7 @@
             app:endIconDrawable="@drawable/ic_wikipedia_icon"
             app:endIconMode="custom"
             app:helperText="Введите запрос"
-            app:layout_constraintBottom_toTopOf="@id/image_view"
+            app:layout_constraintBottom_toTopOf="@id/chips_linear_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -39,6 +39,43 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <LinearLayout
+            android:id="@+id/chips_linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/input_layout">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_today"
+                style="@style/Widget.MaterialComponents.Chip.Action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="3dp"
+                android:text="@string/_today" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_yesterday"
+                style="@style/Widget.MaterialComponents.Chip.Action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="3dp"
+                android:text="@string/_yesterday" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chip_the_day_before_yesterday"
+                style="@style/Widget.MaterialComponents.Chip.Action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="3dp"
+                android:text="@string/_the_day_before_yesterday" />
+
+        </LinearLayout>
+
         <com.artushock.materialdesignproject.ui.main.view.custom.EquilateralImageView
             android:id="@+id/image_view"
             android:layout_width="match_parent"
@@ -48,7 +85,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/input_layout"
+            app:layout_constraintTop_toBottomOf="@id/chips_linear_layout"
             app:srcCompat="@drawable/ic_baseline_no_photography_24" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -64,15 +101,21 @@
         android:layout_gravity="bottom"
         android:backgroundTint="@color/design_default_color_primary"
         app:fabAlignmentMode="center"
-        app:navigationIcon="@drawable/ic_baseline_dehaze_24"/>
+        app:navigationIcon="@drawable/ic_baseline_dehaze_24" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
-        android:contentDescription="@string/astronomy_picture_of_the_day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/design_default_color_secondary"
+        android:contentDescription="@string/astronomy_picture_of_the_day"
         app:layout_anchor="@id/bottom_app_bar"
-        app:srcCompat="@drawable/ic_outline_insert_emoticon_24"/>
+        app:srcCompat="@drawable/ic_outline_insert_emoticon_24" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
