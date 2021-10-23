@@ -20,7 +20,6 @@
     <string name="_chip_icon">Chip icon</string>
     <string name="_chip">Chip</string>
     <string name="_group">Group</string>
-    <string name="_close_icon_listener">Close icon listener</string>
     <string name="_scroll">scroll</string>
     <string name="_horizontal">horizontal</string>
     <string name="_a">a</string>
@@ -32,4 +31,11 @@
     <string name="_yesterday">Yesterday</string>
     <string name="_the_day_before_yesterday">The Day Before Yesterday</string>
     <string name="_info_waited">Information is waited…</string>
+    <string name="_app_theme">App theme</string>
+    <string name="_theme_mode">Theme mode</string>
+    <string name="_window_reflection_theme">Window Reflection Theme</string>
+    <string name="_spain_sunset">Spain Sunset</string>
+    <string name="_light">Light</string>
+    <string name="_dark">Dark</string>
+    <string name="_system_default">System default</string>
 </resources>

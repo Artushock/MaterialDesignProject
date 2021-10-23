@@ -90,7 +90,7 @@ class MainFragment : Fragment() {
             }
             R.id.app_bar_settings -> {
                 activity?.supportFragmentManager?.beginTransaction()
-                    ?.replace(R.id.container, ChipsFragment())?.addToBackStack(null)?.commit()
+                    ?.replace(R.id.container, SettingsFragment())?.addToBackStack(null)?.commit()
             }
             android.R.id.home -> {
                 activity?.let {
