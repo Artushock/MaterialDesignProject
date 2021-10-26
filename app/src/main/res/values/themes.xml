@@ -46,4 +46,9 @@
         <item name="boxCornerRadiusTopStart">10dp</item>
     </style>
 
+    <style name="ChipStyle" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/chip_checking_color</item>
+        <item name="android:textColor">?colorOnSurface</item>
+    </style>
+
 </resources>
