@@ -9,11 +9,10 @@
     tools:context=".ui.main.view.fragments.SettingsFragment">
 
     <TextView
+        style="@style/SettingsTextViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/_app_theme"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:text="@string/_app_theme" />
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/app_theme_chip_group"
@@ -39,12 +38,11 @@
     </com.google.android.material.chip.ChipGroup>
 
     <TextView
+        style="@style/SettingsTextViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/_theme_mode"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:text="@string/_theme_mode" />
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/theme_mode_chip_group"

@@ -13,7 +13,7 @@
     </style>
 
     <style name="AppTheme.BlueGreenTheme">
-        <item name="colorPrimary">@color/first_theme_primary_dark_color</item>
+        <item name="colorPrimary">@color/first_theme_primary_color</item>
         <item name="colorPrimaryVariant">@color/first_theme_primary_color</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/first_theme_secondary_color</item>
@@ -49,6 +49,12 @@
     <style name="ChipStyle" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="chipBackgroundColor">@color/chip_checking_color</item>
         <item name="android:textColor">?colorOnSurface</item>
+    </style>
+
+    <style name="SettingsTextViewStyle" parent="Widget.AppCompat.TextView">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?colorPrimary</item>
     </style>
 
 </resources>
