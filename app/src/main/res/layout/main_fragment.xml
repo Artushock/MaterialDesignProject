@@ -130,9 +130,9 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
+        style="@style/FabStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="?attr/colorSecondary"
         android:contentDescription="@string/astronomy_picture_of_the_day"
         app:layout_anchor="@id/bottom_app_bar"
         app:srcCompat="@drawable/ic_outline_insert_emoticon_24" />

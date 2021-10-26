@@ -57,4 +57,11 @@
         <item name="android:textColor">?colorPrimary</item>
     </style>
 
+    <style name="FabStyle">
+        <item name="borderWidth">0dp</item>
+        <item name="backgroundTint">?colorSecondary</item>
+        <item name="rippleColor">@color/red</item>
+        <item name="tint">?colorOnPrimary</item>
+    </style>
+
 </resources>
