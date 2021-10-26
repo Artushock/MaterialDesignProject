@@ -38,4 +38,6 @@
     <string name="_light">Light</string>
     <string name="_dark">Dark</string>
     <string name="_system_default">System default</string>
+    <string name="_nasa_video_message">Today NASA sent a video. \nIf you want to see this one click on the button</string>
+    <string name="_see_video">Show me video</string>
 </resources>

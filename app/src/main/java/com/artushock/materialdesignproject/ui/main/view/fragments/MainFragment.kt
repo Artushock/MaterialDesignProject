@@ -203,14 +203,14 @@ class MainFragment : Fragment() {
                     serverResponseData.title,
                     serverResponseData.explanation
                 )
+
                 val url = serverResponseData.url
-                if (url.isNullOrEmpty()) {
-                    Toast.makeText(context, "No APOD url!", Toast.LENGTH_SHORT).show()
+                if (serverResponseData.media_type == "video") {
+                    handleVideoUrl(url)
                 } else {
-                    binding.imageView.load(url) {
-                        lifecycle(this@MainFragment)
-                    }
+                    handleImageUrl(url)
                 }
+
             }
             is PictureOfTheDayData.Loading -> {
                 binding.imageView.visibility = View.GONE
@@ -219,6 +219,28 @@ class MainFragment : Fragment() {
             is PictureOfTheDayData.Error -> {
                 throw data.error
             }
+        }
+    }
+
+    private fun handleImageUrl(url: String?) {
+        binding.videoGottenLayout.visibility = View.GONE
+        binding.imageView.visibility = View.VISIBLE
+        if (url.isNullOrEmpty()) {
+            Toast.makeText(context, "No APOD url!", Toast.LENGTH_SHORT).show()
+        } else {
+            binding.imageView.load(url) {
+                lifecycle(this@MainFragment)
+            }
+        }
+    }
+
+    private fun handleVideoUrl(url: String?) {
+        binding.videoGottenLayout.visibility = View.VISIBLE
+        binding.imageView.visibility = View.GONE
+        binding.videoButton.setOnClickListener {
+            val i = Intent(Intent.ACTION_VIEW)
+            i.data = Uri.parse(url)
+            startActivity(i)
         }
     }
 
