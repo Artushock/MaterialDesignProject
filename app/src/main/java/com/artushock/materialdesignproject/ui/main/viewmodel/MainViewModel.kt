@@ -26,8 +26,7 @@ class MainViewModel(
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getCurrentDayData(): LiveData<PictureOfTheDayData> {
-        val date = LocalDate.now().format(DateTimeFormatter.ISO_DATE)
-        sendServerRequest(currentDayLiveDataToObserve, date)
+        sendServerRequest(currentDayLiveDataToObserve, null)
         return currentDayLiveDataToObserve
     }
 
@@ -45,36 +44,60 @@ class MainViewModel(
         return theDayBeforeYesterdayDayDataToObserve
     }
 
-    private fun sendServerRequest(liveData: MutableLiveData<PictureOfTheDayData>, date: String) {
+    private fun sendServerRequest(liveData: MutableLiveData<PictureOfTheDayData>, date: String?) {
         liveData.value = PictureOfTheDayData.Loading(null)
         if (apiKey.isBlank()) {
             PictureOfTheDayData.Error(Throwable("You need API key"))
         } else {
-            retrofitImpl.getRetrofitImpl().getPictureOfTheDayByDate(date , apiKey)
-                .enqueue(object : Callback<PictureOfTheDayDTO> {
-                    override fun onResponse(
-                        call: Call<PictureOfTheDayDTO>,
-                        response: Response<PictureOfTheDayDTO>
-                    ) {
-                        if (response.isSuccessful && response.body() != null) {
-                            liveData.value = PictureOfTheDayData.Success(response.body()!!)
-                        } else {
-                            val message = response.message()
-                            if (message.isNullOrEmpty()) {
-                                liveData.value =
-                                    PictureOfTheDayData.Error(Throwable("Undefined"))
-                            } else {
-                                liveData.value =
-                                    PictureOfTheDayData.Error(Throwable(message))
-                            }
+            if (date == null) {
+                retrofitImpl.getRetrofitImpl().getPictureOfTheDay(apiKey)
+                    .enqueue(object : Callback<PictureOfTheDayDTO> {
+
+                        override fun onResponse(
+                            call: Call<PictureOfTheDayDTO>,
+                            response: Response<PictureOfTheDayDTO>
+                        ) {
+                            handleResponse(response, liveData)
                         }
-                    }
 
-                    override fun onFailure(call: Call<PictureOfTheDayDTO>, t: Throwable) {
-                        currentDayLiveDataToObserve.value = PictureOfTheDayData.Error(t)
-                    }
+                        override fun onFailure(call: Call<PictureOfTheDayDTO>, t: Throwable) {
+                            currentDayLiveDataToObserve.value = PictureOfTheDayData.Error(t)
+                        }
+                    })
+            } else {
+                retrofitImpl.getRetrofitImpl().getPictureOfTheDayByDate(date, apiKey)
+                    .enqueue(object : Callback<PictureOfTheDayDTO> {
 
-                })
+                        override fun onResponse(
+                            call: Call<PictureOfTheDayDTO>,
+                            response: Response<PictureOfTheDayDTO>
+                        ) {
+                            handleResponse(response, liveData)
+                        }
+
+                        override fun onFailure(call: Call<PictureOfTheDayDTO>, t: Throwable) {
+                            currentDayLiveDataToObserve.value = PictureOfTheDayData.Error(t)
+                        }
+                    })
+            }
+        }
+    }
+
+    private fun handleResponse(
+        response: Response<PictureOfTheDayDTO>,
+        liveData: MutableLiveData<PictureOfTheDayData>
+    ) {
+        if (response.isSuccessful && response.body() != null) {
+            liveData.value = PictureOfTheDayData.Success(response.body()!!)
+        } else {
+            val message = response.message()
+            if (message.isNullOrEmpty()) {
+                liveData.value =
+                    PictureOfTheDayData.Error(Throwable("Undefined"))
+            } else {
+                liveData.value =
+                    PictureOfTheDayData.Error(Throwable(message))
+            }
         }
     }
 }
