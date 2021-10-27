@@ -5,6 +5,7 @@
     <color name="red">#FF0000</color>
     <color name="blue">#0050FF</color>
     <color name="light_grey">#E6E6E6</color>
+    <color name="middle_grey">#C7C7C7</color>
     <color name="dark_grey">#2A2A2A</color>
 
     <!--First color scheme-->

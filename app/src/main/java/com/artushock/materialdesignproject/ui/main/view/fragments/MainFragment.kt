@@ -17,6 +17,7 @@ import com.artushock.materialdesignproject.R
 import com.artushock.materialdesignproject.data.model.PictureOfTheDayData
 import com.artushock.materialdesignproject.databinding.MainFragmentBinding
 import com.artushock.materialdesignproject.ui.main.view.activities.MainActivity
+import com.artushock.materialdesignproject.ui.main.view.fragments.photo.PhotoFragment
 import com.artushock.materialdesignproject.ui.main.viewmodel.MainViewModel
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -86,7 +87,11 @@ class MainFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.app_bar_fav -> {
-                Toast.makeText(context, "Favorite", Toast.LENGTH_SHORT).show()
+                requireActivity().supportFragmentManager
+                    .beginTransaction()
+                    .replace(R.id.container, PhotoFragment())
+                    .addToBackStack(null)
+                    .commit()
             }
             R.id.app_bar_settings -> {
                 activity?.supportFragmentManager?.beginTransaction()
