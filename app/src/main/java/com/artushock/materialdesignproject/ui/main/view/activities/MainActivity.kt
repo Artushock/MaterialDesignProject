@@ -6,8 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.artushock.materialdesignproject.R
 import com.artushock.materialdesignproject.databinding.MainActivityBinding
-import com.artushock.materialdesignproject.ui.main.view.fragments.MainFragment
-import com.artushock.materialdesignproject.ui.main.view.fragments.SettingsFragment
+import com.artushock.materialdesignproject.ui.main.view.fragments.search.SearchFragment
+import com.artushock.materialdesignproject.ui.main.view.fragments.settings.SettingsFragment
 import com.artushock.materialdesignproject.ui.main.view.fragments.photo.PhotoFragment
 import com.artushock.materialdesignproject.ui.main.view.theme.ThemePreferencesUtil
 
@@ -39,6 +39,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.search_menu_item -> {
+                    replaceFragment(SearchFragment.newInstance())
                     true
                 }
                 R.id.settings_menu_item -> {

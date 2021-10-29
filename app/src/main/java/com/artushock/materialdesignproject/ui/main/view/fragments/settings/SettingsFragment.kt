@@ -1,4 +1,4 @@
-package com.artushock.materialdesignproject.ui.main.view.fragments
+package com.artushock.materialdesignproject.ui.main.view.fragments.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
