@@ -1,41 +1,64 @@
 package com.artushock.materialdesignproject.ui.main.view.activities
 
-import android.content.res.Configuration
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.artushock.materialdesignproject.R
+import com.artushock.materialdesignproject.databinding.MainActivityBinding
 import com.artushock.materialdesignproject.ui.main.view.fragments.MainFragment
+import com.artushock.materialdesignproject.ui.main.view.fragments.SettingsFragment
+import com.artushock.materialdesignproject.ui.main.view.fragments.photo.PhotoFragment
 import com.artushock.materialdesignproject.ui.main.view.theme.ThemePreferencesUtil
 
 var isSystemDarkMode = true
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: MainActivityBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         ThemePreferencesUtil(this).setAppTheme()
 
-        setContentView(R.layout.main_activity)
+        binding = MainActivityBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+
         if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, MainFragment.newInstance())
-                .commitNow()
+            replaceFragment(PhotoFragment.newInstance())
+        }
+        initBottomNavigationView()
+    }
+
+    private fun initBottomNavigationView() {
+        binding.appBottomNavigation.setOnItemSelectedListener() { it: MenuItem ->
+            when (it.itemId) {
+                R.id.photos_menu_item -> {
+                    replaceFragment(PhotoFragment.newInstance())
+                    true
+                }
+                R.id.search_menu_item -> {
+                    true
+                }
+                R.id.settings_menu_item -> {
+                    replaceFragment(SettingsFragment.newInstance())
+                    true
+                }
+                else -> {
+                    replaceFragment(PhotoFragment.newInstance())
+                    true
+                }
+            }
         }
     }
 
-    override fun onConfigurationChanged(configuration: Configuration) {
-        super.onConfigurationChanged(configuration)
-        isSystemDarkMode = when (configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-            Configuration.UI_MODE_NIGHT_NO -> {
-                false
-            }
-            Configuration.UI_MODE_NIGHT_YES -> {
-                true
-            }
-            else -> {
-                false
-            }
-        }
+
+    private fun replaceFragment(fragment: Fragment) {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(R.id.container, fragment)
+            .commit()
     }
+
 }

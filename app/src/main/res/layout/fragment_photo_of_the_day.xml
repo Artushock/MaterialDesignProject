@@ -85,7 +85,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="84dp"
         android:contentDescription="@string/photo_of_the_day"
         android:src="@drawable/ic_baseline_info_24"
         app:tint="@color/white" />

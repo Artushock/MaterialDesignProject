@@ -55,10 +55,8 @@ class MainFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setBottomSheetBehavior(binding.includedBottomSheet.bottomSheetContainer)
 
         initTextInputLayout()
-        setBottomAppBar()
         initViewModel()
         initChips()
     }
@@ -106,44 +104,6 @@ class MainFragment : Fragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun setBottomAppBar() {
-        val context = activity as MainActivity
-        context.setSupportActionBar(binding.bottomAppBar)
-        setHasOptionsMenu(true)
-
-        with(binding) {
-            fab.setOnClickListener {
-                if (isMain) {
-                    isMain = false
-                    bottomAppBar.navigationIcon = null
-                    bottomAppBar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_END
-                    fab.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            context,
-                            R.drawable.ic_baseline_arrow_back_24
-                        )
-                    )
-                    bottomAppBar.replaceMenu(R.menu.menu_bottom_bar)
-                } else {
-                    isMain = true
-                    bottomAppBar.navigationIcon =
-                        ContextCompat.getDrawable(
-                            context,
-                            R.drawable.ic_outline_insert_emoticon_24
-                        )
-                    bottomAppBar.fabAlignmentMode = BottomAppBar.FAB_ALIGNMENT_MODE_CENTER
-                    fab.setImageDrawable(
-                        ContextCompat.getDrawable(
-                            context,
-                            R.drawable.ic_baseline_arrow_forward_24
-                        )
-                    )
-                    bottomAppBar.replaceMenu(R.menu.menu_bottom_app_bar)
-                }
-            }
-        }
-    }
-
     private fun initTextInputLayout() {
         binding.inputLayout.setEndIconOnClickListener {
             startActivity(Intent(Intent.ACTION_VIEW).apply {
@@ -153,44 +113,6 @@ class MainFragment : Fragment() {
         }
     }
 
-    private fun setBottomSheetBehavior(bottomSheet: ConstraintLayout) {
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-
-        binding.includedBottomSheet.bottomSheetDescriptionHeader.text =
-            getString(R.string._info_waited)
-
-        bottomSheetBehavior.addBottomSheetCallback(object :
-            BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                when (newState) {
-                    BottomSheetBehavior.STATE_COLLAPSED -> {
-                        Toast.makeText(context, "STATE_COLLAPSED", Toast.LENGTH_SHORT).show()
-                    }
-                    BottomSheetBehavior.STATE_DRAGGING -> {
-                        Toast.makeText(context, "STATE_DRAGGING", Toast.LENGTH_SHORT).show()
-                    }
-                    BottomSheetBehavior.STATE_EXPANDED -> {
-                        Toast.makeText(context, "STATE_EXPANDED", Toast.LENGTH_SHORT).show()
-                    }
-                    BottomSheetBehavior.STATE_HALF_EXPANDED -> {
-                        Toast.makeText(context, "STATE_HALF_EXPANDED", Toast.LENGTH_SHORT).show()
-                    }
-                    BottomSheetBehavior.STATE_HIDDEN -> {
-                        Toast.makeText(context, "STATE_HIDDEN", Toast.LENGTH_SHORT).show()
-                    }
-                    BottomSheetBehavior.STATE_SETTLING -> {
-                        Toast.makeText(context, "STATE_SETTLING", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                Log.d("123123123", "slideOffset $slideOffset")
-            }
-        })
-
-    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initViewModel() {
@@ -204,10 +126,6 @@ class MainFragment : Fragment() {
                 binding.progressBar.visibility = View.GONE
 
                 val serverResponseData = data.serverResponseData
-                setPhotoDescriptionIntoBottomSheet(
-                    serverResponseData.title,
-                    serverResponseData.explanation
-                )
 
                 val url = serverResponseData.url
                 if (serverResponseData.media_type == "video") {
@@ -246,16 +164,6 @@ class MainFragment : Fragment() {
             val i = Intent(Intent.ACTION_VIEW)
             i.data = Uri.parse(url)
             startActivity(i)
-        }
-    }
-
-    private fun setPhotoDescriptionIntoBottomSheet(title: String?, description: String?) {
-        val t = if (title.isNullOrEmpty()) "No title" else title
-        val d = if (description.isNullOrEmpty()) "No description" else description
-
-        with(binding.includedBottomSheet) {
-            bottomSheetDescriptionHeader.text = t
-            bottomSheetDescription.text = d
         }
     }
 }

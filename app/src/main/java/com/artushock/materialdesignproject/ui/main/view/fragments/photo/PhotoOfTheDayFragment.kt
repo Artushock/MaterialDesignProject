@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import coil.load
+import com.artushock.materialdesignproject.R
 import com.artushock.materialdesignproject.data.model.PictureOfTheDayData
 import com.artushock.materialdesignproject.databinding.FragmentPhotoOfTheDayBinding
 import com.artushock.materialdesignproject.ui.main.viewmodel.MainViewModel
@@ -25,6 +27,10 @@ class PhotoOfTheDayFragment : Fragment() {
 
     private var _binding: FragmentPhotoOfTheDayBinding? = null
     private val binding get() = _binding!!
+
+    companion object {
+        fun newInstance() = PhotoOfTheDayFragment()
+    }
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this).get(MainViewModel::class.java)
@@ -46,7 +52,7 @@ class PhotoOfTheDayFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val bottomSheetLayout = binding.bottomSheetInfo.infoBottomSheetContainer
+        val bottomSheetLayout: LinearLayout = binding.bottomSheetInfo.infoBottomSheetContainer
         setBottomSheetBehavior(bottomSheetLayout)
 
         initViewModel()
@@ -150,10 +156,11 @@ class PhotoOfTheDayFragment : Fragment() {
     }
 
     private fun setPhotoDescriptionIntoBottomSheet(title: String?, description: String?) {
+        Log.d("123123123", "$title and $description")
         val t = if (title.isNullOrEmpty()) "No title" else title
         val d = if (description.isNullOrEmpty()) "No description" else description
 
-        with(binding.bottomSheetInfo) {
+        with(binding.bottomSheetInfo){
             infoTitle.text = t
             infoContent.text = d
         }

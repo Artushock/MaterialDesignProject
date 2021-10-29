@@ -115,32 +115,14 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <include
-        android:id="@+id/included_bottom_sheet"
-        layout="@layout/bottom_sheet_layout" />
 
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottom_app_bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:backgroundTint="?attr/colorPrimary"
-        app:fabAlignmentMode="center"
-        app:navigationIcon="@drawable/ic_baseline_dehaze_24" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        style="@style/FabStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/astronomy_picture_of_the_day"
-        app:layout_anchor="@id/bottom_app_bar"
-        app:srcCompat="@drawable/ic_outline_insert_emoticon_24" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_gravity="center" />
+
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

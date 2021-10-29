@@ -2,10 +2,9 @@ package com.artushock.materialdesignproject.ui.main.view.fragments.photo
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentStatePagerAdapter
 
-class ViewPagerAdapter(fragmentManager: FragmentManager) :
-    FragmentPagerAdapter(fragmentManager) {
+class ViewPagerAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
     private val fragments =
         arrayOf(PhotoOfTheDayFragment(), YesterdayPhotoFragment(), DayBeforeYesterdayPhotoFragment())
 
