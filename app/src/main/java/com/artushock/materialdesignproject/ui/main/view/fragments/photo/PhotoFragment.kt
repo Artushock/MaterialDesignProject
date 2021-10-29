@@ -31,8 +31,12 @@ class PhotoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.photoViewPager.adapter = ViewPagerAdapter(parentFragmentManager)
-        binding.tabLayout.setupWithViewPager(binding.photoViewPager)
+
+        val viewPager = binding.photoViewPager
+        viewPager.adapter = ViewPagerAdapter(parentFragmentManager)
+        viewPager.setPageTransformer(true, CustomPageTransformer())
+
+        binding.tabLayout.setupWithViewPager(viewPager)
     }
 
 }
