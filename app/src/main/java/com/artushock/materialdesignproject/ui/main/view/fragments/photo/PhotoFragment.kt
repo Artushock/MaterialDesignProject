@@ -12,7 +12,7 @@ class PhotoFragment : Fragment() {
     private var _binding: FragmentPhotoBinding? = null
     private val binding get() = _binding!!
 
-    companion object{
+    companion object {
         fun newInstance() = PhotoFragment()
     }
 
@@ -33,10 +33,10 @@ class PhotoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val viewPager = binding.photoViewPager
-        viewPager.adapter = ViewPagerAdapter(parentFragmentManager)
+        viewPager.adapter = ViewPagerAdapter(childFragmentManager)
         viewPager.setPageTransformer(true, CustomPageTransformer())
 
-        binding.tabLayout.setupWithViewPager(viewPager)
+        val tabLayout = binding.tabLayout
+        tabLayout.setupWithViewPager(viewPager)
     }
-
 }

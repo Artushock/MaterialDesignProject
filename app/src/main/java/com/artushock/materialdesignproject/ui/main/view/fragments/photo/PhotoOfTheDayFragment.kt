@@ -14,7 +14,6 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import coil.load
-import com.artushock.materialdesignproject.R
 import com.artushock.materialdesignproject.data.model.PictureOfTheDayData
 import com.artushock.materialdesignproject.databinding.FragmentPhotoOfTheDayBinding
 import com.artushock.materialdesignproject.ui.main.viewmodel.MainViewModel
@@ -27,10 +26,6 @@ class PhotoOfTheDayFragment : Fragment() {
 
     private var _binding: FragmentPhotoOfTheDayBinding? = null
     private val binding get() = _binding!!
-
-    companion object {
-        fun newInstance() = PhotoOfTheDayFragment()
-    }
 
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(this).get(MainViewModel::class.java)

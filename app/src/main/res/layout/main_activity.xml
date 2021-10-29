@@ -9,6 +9,7 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/app_bottom_navigation"
+        style="@style/BottomNavigationViewStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"

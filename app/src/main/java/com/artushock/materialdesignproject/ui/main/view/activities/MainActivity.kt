@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         binding.appBottomNavigation.setOnItemSelectedListener() { it: MenuItem ->
             when (it.itemId) {
                 R.id.photos_menu_item -> {
-                    replaceFragment(PhotoFragment.newInstance())
+                    replaceFragment(PhotoFragment())
                     true
                 }
                 R.id.search_menu_item -> {
