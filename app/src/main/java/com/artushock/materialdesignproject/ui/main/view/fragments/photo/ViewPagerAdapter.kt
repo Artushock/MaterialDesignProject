@@ -21,8 +21,8 @@ class ViewPagerAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAda
     override fun getPageTitle(position: Int): CharSequence {
         return when (position){
             0 -> "Photo of the Day"
-            1 -> "Yesterday"
-            2 -> "Day before yesterday"
+            1 -> "Rovers on Mars"
+            2 -> "Earth"
             else -> "Today"
         }
     }

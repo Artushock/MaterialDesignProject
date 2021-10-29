@@ -35,7 +35,7 @@ class YesterdayPhotoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_yesterday_photo, container, false)
+        return inflater.inflate(R.layout.fragment_rovers_on_mars, container, false)
     }
 
     companion object {
