@@ -40,4 +40,10 @@
     <string name="_see_video">Show me video</string>
     <string name="photos">Photos</string>
     <string name="search">Search</string>
+    <string name="_previous_day">Previous day</string>
+    <string name="_next_day">Next day</string>
+    <string name="_set_date">Set date</string>
+    <string name="curiosity">Curiosity</string>
+    <string name="opportunity">Opportunity</string>
+    <string name="spirit">Spirit</string>
 </resources>

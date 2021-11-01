@@ -1,4 +1,4 @@
-package com.artushock.materialdesignproject.ui.main.view.fragments.photo
+package com.artushock.materialdesignproject.ui.main.view.fragments.photo.photoofday
 
 import android.content.Intent
 import android.net.Uri
@@ -16,7 +16,6 @@ import androidx.lifecycle.ViewModelProvider
 import coil.load
 import com.artushock.materialdesignproject.data.model.PictureOfTheDayData
 import com.artushock.materialdesignproject.databinding.FragmentPhotoOfTheDayBinding
-import com.artushock.materialdesignproject.ui.main.viewmodel.MainViewModel
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 class PhotoOfTheDayFragment : Fragment() {

@@ -1,4 +1,4 @@
-package com.artushock.materialdesignproject.ui.main.viewmodel
+package com.artushock.materialdesignproject.ui.main.view.fragments.photo.photoofday
 
 import android.os.Build
 import androidx.annotation.RequiresApi
