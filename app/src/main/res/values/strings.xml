@@ -46,4 +46,16 @@
     <string name="curiosity">Curiosity</string>
     <string name="opportunity">Opportunity</string>
     <string name="spirit">Spirit</string>
+    <string name="_asteroids">Asteroids</string>
+    <string name="_name">Name:</string>
+    <string name="_h_absolute_magnitude">H (absolute magnitude):</string>
+    <string name="_is_potentially_hazardous_asteroid">Is potentially hazardous asteroid:</string>
+    <string name="_close_approach_date_time">Close approach date/time:</string>
+    <string name="_orbiting_body">Orbiting body:</string>
+    <string name="_estimated_diameter_min_m">Estimated diameter, min(m):</string>
+    <string name="_miss_distance_km">Miss distance(km):</string>
+    <string name="_estimated_diameter_max_m">Estimated diameter, max(m):</string>
+    <string name="_relative_velocity_km_sec">Relative velocity (km/sec):</string>
+    <string name="_previous">Previous</string>
+    <string name="_next">Next</string>
 </resources>

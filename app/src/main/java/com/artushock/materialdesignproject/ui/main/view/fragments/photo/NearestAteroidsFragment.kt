@@ -35,7 +35,7 @@ class DayBeforeYesterdayPhotoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_earth, container, false)
+        return inflater.inflate(R.layout.fragment_nearest_asteroids, container, false)
     }
 
     companion object {

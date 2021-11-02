@@ -24,7 +24,7 @@ class ViewPagerAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAda
         return when (position){
             0 -> "Photo of the Day"
             1 -> "Rovers on Mars"
-            2 -> "Earth"
+            2 -> "Nearest asteroids"
             else -> "Today"
         }
     }
