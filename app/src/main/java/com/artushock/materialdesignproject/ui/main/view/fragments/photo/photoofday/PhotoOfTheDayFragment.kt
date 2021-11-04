@@ -10,16 +10,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.BounceInterpolator
+import android.widget.CompoundButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.transition.ChangeBounds
-import androidx.transition.ChangeImageTransform
-import androidx.transition.TransitionManager
-import androidx.transition.TransitionSet
+import androidx.transition.*
 import coil.load
 import com.artushock.materialdesignproject.data.model.PictureOfTheDayData
 import com.artushock.materialdesignproject.databinding.FragmentPhotoOfTheDayBinding
@@ -40,7 +38,7 @@ class PhotoOfTheDayFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentPhotoOfTheDayBinding.inflate(inflater, container, false)
         return binding.root
@@ -63,25 +61,45 @@ class PhotoOfTheDayFragment : Fragment() {
 
     private fun setImageClickAnimation() {
         val image = binding.photoImageView
+        val chipGroup = binding.photoOfTheDayChipGroup
         image.setOnClickListener {
             isImageExpanded = !isImageExpanded
             TransitionManager.beginDelayedTransition(
                 binding.photoOfTheDayContainer, TransitionSet()
+                    .addTransition(Fade())
                     .addTransition(ChangeBounds())
                     .addTransition(ChangeImageTransform())
             )
 
-            image.scaleType =
-                if (isImageExpanded)
-                    ImageView.ScaleType.CENTER_CROP
-                else
-                    ImageView.ScaleType.FIT_CENTER
+            val params: ViewGroup.LayoutParams = image.layoutParams
+            params.height = if (isImageExpanded)
+                ViewGroup.LayoutParams.MATCH_PARENT
+            else
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            image.layoutParams = params
 
+            if (isImageExpanded) {
+                image.scaleType = ImageView.ScaleType.CENTER_CROP
+                chipGroup.visibility = View.GONE
+            } else {
+                image.scaleType = ImageView.ScaleType.FIT_CENTER
+                chipGroup.visibility = View.VISIBLE
+            }
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initChips() {
+        binding.todayPhotoChip.setOnCheckedChangeListener { chip: CompoundButton?, _ ->
+            animateChip(chip)
+        }
+        binding.yesterdayPhotoChip.setOnCheckedChangeListener { chip: CompoundButton?, _ ->
+            animateChip(chip)
+        }
+        binding.dayBeforeYesterdayPhotoChip.setOnCheckedChangeListener { chip: CompoundButton?, _ ->
+            animateChip(chip)
+        }
+
         with(binding) {
             todayPhotoChip.setOnClickListener {
                 viewModel.getCurrentDayData().observe(viewLifecycleOwner, {
@@ -90,13 +108,36 @@ class PhotoOfTheDayFragment : Fragment() {
                 })
             }
             yesterdayPhotoChip.setOnClickListener {
-                yesterdayPhotoChip.isChecked = true
-                viewModel.getYesterdayData().observe(viewLifecycleOwner, { renderData(it) })
+                viewModel.getYesterdayData().observe(viewLifecycleOwner, {
+                    yesterdayPhotoChip.isChecked = true
+                    renderData(it)
+                })
             }
             dayBeforeYesterdayPhotoChip.setOnClickListener {
-                dayBeforeYesterdayPhotoChip.isChecked = true
                 viewModel.getDayBeforeYesterdayData()
-                    .observe(viewLifecycleOwner, { renderData(it) })
+                    .observe(viewLifecycleOwner, {
+                        dayBeforeYesterdayPhotoChip.isChecked = true
+                        renderData(it)
+                    })
+            }
+        }
+    }
+
+    private fun animateChip(chip: CompoundButton?) {
+        val chipAnimationScale = 1.2f
+        chip?.let {
+            if (chip.isChecked) {
+                chip.animate()
+                    .scaleX(chipAnimationScale)
+                    .scaleY(chipAnimationScale)
+                    .setInterpolator(BounceInterpolator())
+                    .setDuration(1000)
+            } else {
+                chip.animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setInterpolator(BounceInterpolator())
+                    .setDuration(1000)
             }
         }
     }
@@ -104,29 +145,54 @@ class PhotoOfTheDayFragment : Fragment() {
     private fun setBottomSheetBehavior(container: LinearLayout) {
         bottomSheetBehavior = BottomSheetBehavior.from(container)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                        animateFabRotation(0f)
+                    }
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                        animateFabRotation(90f)
+                    }
+                    else -> {
+                        //do nothing
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                //do nothing
+            }
+
+        })
+
         initFabInfo()
     }
 
     private fun initFabInfo() {
         binding.fabInfo.setOnClickListener {
-            if (isInfoExpanded) {
+            if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                val fabRotationObjectAnimator =
-                    ObjectAnimator.ofFloat(binding.fabInfo, "rotation", 0f)
-                fabRotationObjectAnimator.duration = 1000
-                fabRotationObjectAnimator.interpolator = BounceInterpolator()
-                fabRotationObjectAnimator.start()
-                isInfoExpanded = !isInfoExpanded
+                animateFabRotation(0f)
             } else {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
-                val fabRotationObjectAnimator =
-                    ObjectAnimator.ofFloat(binding.fabInfo, "rotation", 90f)
-                fabRotationObjectAnimator.duration = 1000
-                fabRotationObjectAnimator.interpolator = BounceInterpolator()
-                fabRotationObjectAnimator.start()
-                isInfoExpanded = !isInfoExpanded
+                animateFabRotation(90f)
             }
         }
+    }
+
+    private fun animateFabRotation(angle: Float) {
+        val fabRotationObjectAnimator = ObjectAnimator.ofFloat(
+            binding.fabInfo,
+            "rotation",
+            angle
+        )
+        fabRotationObjectAnimator.duration = 1000
+        fabRotationObjectAnimator.interpolator = BounceInterpolator()
+        fabRotationObjectAnimator.start()
+        isInfoExpanded = !isInfoExpanded
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

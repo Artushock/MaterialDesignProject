@@ -16,32 +16,30 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class MainViewModel(
-    private val currentDayLiveDataToObserve: MutableLiveData<PictureOfTheDayData> = MutableLiveData(),
-    private val yesterdayDayDataToObserve: MutableLiveData<PictureOfTheDayData> = MutableLiveData(),
-    private val theDayBeforeYesterdayDayDataToObserve: MutableLiveData<PictureOfTheDayData> = MutableLiveData(),
-    private val retrofitImpl: RetrofitImpl = RetrofitImpl()
+    private val dataToObserve: MutableLiveData<PictureOfTheDayData> = MutableLiveData(),
+    private val retrofitImpl: RetrofitImpl = RetrofitImpl(),
 ) : ViewModel() {
 
     private val apiKey = BuildConfig.NASA_API_KEY
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getCurrentDayData(): LiveData<PictureOfTheDayData> {
-        sendServerRequest(currentDayLiveDataToObserve, null)
-        return currentDayLiveDataToObserve
+        sendServerRequest(dataToObserve, null)
+        return dataToObserve
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getYesterdayData(): LiveData<PictureOfTheDayData> {
         val date = LocalDate.now().minusDays(1).format(DateTimeFormatter.ISO_DATE)
-        sendServerRequest(yesterdayDayDataToObserve, date)
-        return yesterdayDayDataToObserve
+        sendServerRequest(dataToObserve, date)
+        return dataToObserve
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun getDayBeforeYesterdayData(): LiveData<PictureOfTheDayData> {
         val date = LocalDate.now().minusDays(2).format(DateTimeFormatter.ISO_DATE)
-        sendServerRequest(theDayBeforeYesterdayDayDataToObserve, date)
-        return theDayBeforeYesterdayDayDataToObserve
+        sendServerRequest(dataToObserve, date)
+        return dataToObserve
     }
 
     private fun sendServerRequest(liveData: MutableLiveData<PictureOfTheDayData>, date: String?) {
@@ -49,55 +47,34 @@ class MainViewModel(
         if (apiKey.isBlank()) {
             PictureOfTheDayData.Error(Throwable("You need API key"))
         } else {
-            if (date == null) {
+            val callback = if (date == null)
                 retrofitImpl.getRetrofitImpl().getPictureOfTheDay(apiKey)
-                    .enqueue(object : Callback<PictureOfTheDayDTO> {
-
-                        override fun onResponse(
-                            call: Call<PictureOfTheDayDTO>,
-                            response: Response<PictureOfTheDayDTO>
-                        ) {
-                            handleResponse(response, liveData)
-                        }
-
-                        override fun onFailure(call: Call<PictureOfTheDayDTO>, t: Throwable) {
-                            currentDayLiveDataToObserve.value = PictureOfTheDayData.Error(t)
-                        }
-                    })
-            } else {
+            else
                 retrofitImpl.getRetrofitImpl().getPictureOfTheDayByDate(date, apiKey)
-                    .enqueue(object : Callback<PictureOfTheDayDTO> {
 
-                        override fun onResponse(
-                            call: Call<PictureOfTheDayDTO>,
-                            response: Response<PictureOfTheDayDTO>
-                        ) {
-                            handleResponse(response, liveData)
+            callback.enqueue(object : Callback<PictureOfTheDayDTO> {
+                override fun onResponse(
+                    call: Call<PictureOfTheDayDTO>,
+                    response: Response<PictureOfTheDayDTO>,
+                ) {
+                    if (response.isSuccessful && response.body() != null) {
+                        liveData.value = PictureOfTheDayData.Success(response.body()!!)
+                    } else {
+                        val message = response.message()
+                        if (message.isNullOrEmpty()) {
+                            liveData.value =
+                                PictureOfTheDayData.Error(Throwable("Undefined"))
+                        } else {
+                            liveData.value =
+                                PictureOfTheDayData.Error(Throwable(message))
                         }
+                    }
+                }
 
-                        override fun onFailure(call: Call<PictureOfTheDayDTO>, t: Throwable) {
-                            currentDayLiveDataToObserve.value = PictureOfTheDayData.Error(t)
-                        }
-                    })
-            }
-        }
-    }
-
-    private fun handleResponse(
-        response: Response<PictureOfTheDayDTO>,
-        liveData: MutableLiveData<PictureOfTheDayData>
-    ) {
-        if (response.isSuccessful && response.body() != null) {
-            liveData.value = PictureOfTheDayData.Success(response.body()!!)
-        } else {
-            val message = response.message()
-            if (message.isNullOrEmpty()) {
-                liveData.value =
-                    PictureOfTheDayData.Error(Throwable("Undefined"))
-            } else {
-                liveData.value =
-                    PictureOfTheDayData.Error(Throwable(message))
-            }
+                override fun onFailure(call: Call<PictureOfTheDayDTO>, t: Throwable) {
+                    dataToObserve.value = PictureOfTheDayData.Error(t)
+                }
+            })
         }
     }
 }
