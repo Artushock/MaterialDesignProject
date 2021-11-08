@@ -3,12 +3,13 @@ package com.artushock.materialdesignproject.ui.main.view.fragments.photo
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
+import com.artushock.materialdesignproject.ui.main.view.fragments.photo.asteroids.NearestAsteroidsFragment
 import com.artushock.materialdesignproject.ui.main.view.fragments.photo.marsroverphotos.MarsRoverPhotosFragment
 import com.artushock.materialdesignproject.ui.main.view.fragments.photo.photoofday.PhotoOfTheDayFragment
 
 class ViewPagerAdapter(fragmentManager: FragmentManager) : FragmentStatePagerAdapter(fragmentManager) {
     private val fragments =
-        arrayOf(PhotoOfTheDayFragment(), MarsRoverPhotosFragment(), DayBeforeYesterdayPhotoFragment())
+        arrayOf(PhotoOfTheDayFragment(), MarsRoverPhotosFragment(), NearestAsteroidsFragment())
 
 
     override fun getCount(): Int = fragments.size
