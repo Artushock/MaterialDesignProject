@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".ui.main.view.fragments.SettingsFragment">
+
+    <TextView
+        style="@style/SettingsTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/_app_theme" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/app_theme_chip_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:selectionRequired="true"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_blue_green_theme"
+            style="@style/ChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/_window_reflection_theme" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_red_orange_theme"
+            style="@style/ChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/_spain_sunset" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <TextView
+        style="@style/SettingsTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="@string/_theme_mode" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/theme_mode_chip_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:selectionRequired="true"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_light_mode"
+            style="@style/ChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/_light" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_dark_mode"
+            style="@style/ChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/_dark" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_system_mode"
+            style="@style/ChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/_system_default" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+</LinearLayout>
