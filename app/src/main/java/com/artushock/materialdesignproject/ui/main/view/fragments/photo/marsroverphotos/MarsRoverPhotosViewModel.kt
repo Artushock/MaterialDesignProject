@@ -28,7 +28,7 @@ class MarsRoverPhotosViewModel(
         if (apiKey.isBlank()) {
             MarsRoverPhotosData.Error(Throwable("You need API key"))
         } else {
-            retrofitImpl.getRetrofitImpl().getCuriosityPhotosByDate(date, "FHAZ", apiKey)
+            retrofitImpl.getRetrofitImpl().getCuriosityPhotosByDate(date, apiKey)
                 .enqueue(object : Callback<MarsRoverPhotosDTO>{
                     override fun onResponse(
                         call: Call<MarsRoverPhotosDTO>,

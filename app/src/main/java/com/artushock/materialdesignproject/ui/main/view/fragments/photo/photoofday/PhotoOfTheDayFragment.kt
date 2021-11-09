@@ -1,5 +1,6 @@
 package com.artushock.materialdesignproject.ui.main.view.fragments.photo.photoofday
 
+import android.animation.ObjectAnimator
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -8,11 +9,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.BounceInterpolator
+import android.widget.CompoundButton
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.transition.*
 import coil.load
 import com.artushock.materialdesignproject.data.model.PictureOfTheDayData
 import com.artushock.materialdesignproject.databinding.FragmentPhotoOfTheDayBinding
@@ -32,7 +36,7 @@ class PhotoOfTheDayFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentPhotoOfTheDayBinding.inflate(inflater, container, false)
         return binding.root
@@ -48,13 +52,22 @@ class PhotoOfTheDayFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val bottomSheetLayout: LinearLayout = binding.bottomSheetInfo.infoBottomSheetContainer
         setBottomSheetBehavior(bottomSheetLayout)
-
         initViewModel()
         initChips()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initChips() {
+        binding.todayPhotoChip.setOnCheckedChangeListener { chip: CompoundButton?, _ ->
+            animateChip(chip)
+        }
+        binding.yesterdayPhotoChip.setOnCheckedChangeListener { chip: CompoundButton?, _ ->
+            animateChip(chip)
+        }
+        binding.dayBeforeYesterdayPhotoChip.setOnCheckedChangeListener { chip: CompoundButton?, _ ->
+            animateChip(chip)
+        }
+
         with(binding) {
             todayPhotoChip.setOnClickListener {
                 viewModel.getCurrentDayData().observe(viewLifecycleOwner, {
@@ -63,13 +76,36 @@ class PhotoOfTheDayFragment : Fragment() {
                 })
             }
             yesterdayPhotoChip.setOnClickListener {
-                yesterdayPhotoChip.isChecked = true
-                viewModel.getYesterdayData().observe(viewLifecycleOwner, { renderData(it) })
+                viewModel.getYesterdayData().observe(viewLifecycleOwner, {
+                    yesterdayPhotoChip.isChecked = true
+                    renderData(it)
+                })
             }
             dayBeforeYesterdayPhotoChip.setOnClickListener {
-                dayBeforeYesterdayPhotoChip.isChecked = true
                 viewModel.getDayBeforeYesterdayData()
-                    .observe(viewLifecycleOwner, { renderData(it) })
+                    .observe(viewLifecycleOwner, {
+                        dayBeforeYesterdayPhotoChip.isChecked = true
+                        renderData(it)
+                    })
+            }
+        }
+    }
+
+    private fun animateChip(chip: CompoundButton?) {
+        val chipAnimationScale = 1.1f
+        chip?.let {
+            if (chip.isChecked) {
+                chip.animate()
+                    .scaleX(chipAnimationScale)
+                    .scaleY(chipAnimationScale)
+                    .setInterpolator(BounceInterpolator())
+                    .setDuration(1000)
+            } else {
+                chip.animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setInterpolator(BounceInterpolator())
+                    .setDuration(1000)
             }
         }
     }
@@ -77,30 +113,68 @@ class PhotoOfTheDayFragment : Fragment() {
     private fun setBottomSheetBehavior(container: LinearLayout) {
         bottomSheetBehavior = BottomSheetBehavior.from(container)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_COLLAPSED -> {
+                        animateFabRotation(0f)
+                    }
+                    BottomSheetBehavior.STATE_EXPANDED -> {
+                        animateFabRotation(90f)
+                    }
+                    else -> {
+                        //do nothing
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                //do nothing
+            }
+
+        })
+
         initFabInfo()
     }
 
     private fun initFabInfo() {
         binding.fabInfo.setOnClickListener {
-            if (isInfoExpanded) {
-                isInfoExpanded = false
+            if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_EXPANDED) {
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                animateFabRotation(0f)
             } else {
-                isInfoExpanded = true
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                animateFabRotation(90f)
             }
         }
     }
 
+    private fun animateFabRotation(angle: Float) {
+        val fabRotationObjectAnimator = ObjectAnimator.ofFloat(
+            binding.fabInfo,
+            "rotation",
+            angle
+        )
+        fabRotationObjectAnimator.duration = 1000
+        fabRotationObjectAnimator.interpolator = BounceInterpolator()
+        fabRotationObjectAnimator.start()
+        isInfoExpanded = !isInfoExpanded
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initViewModel() {
-        viewModel.getCurrentDayData().observe(viewLifecycleOwner, { renderData(it) })
+        viewModel.getCurrentDayData().observe(viewLifecycleOwner, {
+            binding.todayPhotoChip.isChecked = true
+            renderData(it)
+        })
     }
 
     private fun renderData(data: PictureOfTheDayData?) {
         when (data) {
             is PictureOfTheDayData.Success -> {
-                binding.photoImageView.visibility = View.VISIBLE
+                binding.photoView.visibility = View.VISIBLE
                 binding.photoProgressBar.visibility = View.GONE
 
                 val serverResponseData = data.serverResponseData
@@ -118,7 +192,7 @@ class PhotoOfTheDayFragment : Fragment() {
 
             }
             is PictureOfTheDayData.Loading -> {
-                binding.photoImageView.visibility = View.GONE
+                binding.photoView.visibility = View.GONE
                 binding.photoProgressBar.visibility = View.VISIBLE
             }
             is PictureOfTheDayData.Error -> {
@@ -129,11 +203,11 @@ class PhotoOfTheDayFragment : Fragment() {
 
     private fun handleImageUrl(url: String?) {
         binding.videoGottenLayout.visibility = View.GONE
-        binding.photoImageView.visibility = View.VISIBLE
+        binding.photoView.visibility = View.VISIBLE
         if (url.isNullOrEmpty()) {
             Toast.makeText(context, "NASA sent nothing!", Toast.LENGTH_SHORT).show()
         } else {
-            binding.photoImageView.load(url) {
+            binding.photoView.load(url){
                 lifecycle(this@PhotoOfTheDayFragment)
             }
         }
@@ -141,7 +215,7 @@ class PhotoOfTheDayFragment : Fragment() {
 
     private fun handleVideoUrl(url: String?) {
         binding.videoGottenLayout.visibility = View.VISIBLE
-        binding.photoImageView.visibility = View.GONE
+        binding.photoView.visibility = View.GONE
         binding.videoButton.setOnClickListener {
             val i = Intent(Intent.ACTION_VIEW)
             i.data = Uri.parse(url)
@@ -154,7 +228,7 @@ class PhotoOfTheDayFragment : Fragment() {
         val t = if (title.isNullOrEmpty()) "No title" else title
         val d = if (description.isNullOrEmpty()) "No description" else description
 
-        with(binding.bottomSheetInfo){
+        with(binding.bottomSheetInfo) {
             infoTitle.text = t
             infoContent.text = d
         }

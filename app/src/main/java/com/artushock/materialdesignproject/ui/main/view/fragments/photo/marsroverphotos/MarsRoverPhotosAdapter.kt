@@ -32,8 +32,9 @@ class MarsRoverPhotosAdapter(private val data: List<MarsRoverPhoto>) :
         Picasso.get()
             .load(data[position].url)
             .into(holder.itemImageView)
-        holder.itemTextView.text =
-            "${data[position].roverName}: ${data[position].date}, id: ${data[position].id}"
+        holder.itemTextView.text = with(data[position]){
+            "$roverName: $date, ID: $id\n $cameraName: $cameraFullName"
+        }
     }
 
     override fun getItemCount(): Int {

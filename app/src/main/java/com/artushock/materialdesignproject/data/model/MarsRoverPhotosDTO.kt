@@ -16,7 +16,9 @@ data class MarsRoverPhotosDTO(
             val url = this.img_src
             val roverName = this.rover.name
             val date = this.earth_date
-            return MarsRoverPhoto(id, url, roverName, date)
+            val cameraName = this.camera.name
+            val cameraFullName = this.camera.full_name
+            return MarsRoverPhoto(id, url, roverName, date, cameraName, cameraFullName)
         }
 
         inner class Camera(

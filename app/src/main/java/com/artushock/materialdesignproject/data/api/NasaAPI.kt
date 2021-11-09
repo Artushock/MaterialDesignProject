@@ -22,7 +22,6 @@ interface NasaAPI {
     @GET("mars-photos/api/v1/rovers/curiosity/photos")
     fun getCuriosityPhotosByDate(
         @Query("earth_date") earth_date: String,
-        @Query("camera") camera: String,
         @Query("api_key") apiKey: String
     ) : Call<MarsRoverPhotosDTO>
 }

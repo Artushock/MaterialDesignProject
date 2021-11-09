@@ -1,8 +1,12 @@
 package com.artushock.materialdesignproject.ui.main.view.fragments.photo.marsroverphotos
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -44,12 +48,33 @@ class MarsRoverPhotosFragment : Fragment() {
 
         date = LocalDate.now().format(DateTimeFormatter.ISO_DATE)
 
-        val toolbar = binding.marsRoverToolbar
-        toolbar.inflateMenu(R.menu.mars_rover_photos_menu)
+        initToolbar()
 
         initChips()
 
         initViewModel(date)
+    }
+
+    private fun initToolbar() {
+        val toolbar = binding.marsRoverToolbar
+        toolbar.inflateMenu(R.menu.mars_rover_photos_menu)
+        toolbar.setOnMenuItemClickListener { itemMenu ->
+            when (itemMenu.itemId) {
+                R.id.mars_rover_menu_rover_curiosity -> {
+                    Toast.makeText(requireContext(), "Curiosity", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                R.id.mars_rover_menu_rover_opportunity -> {
+                    Toast.makeText(requireContext(), "Opportunity", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                R.id.mars_rover_menu_rover_spirit -> {
+                    Toast.makeText(requireContext(), "Spirit", Toast.LENGTH_SHORT).show()
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun setToolbarTitle(photosAmount: Int) {
@@ -91,9 +116,9 @@ class MarsRoverPhotosFragment : Fragment() {
                 binding.marsRoverTextView.visibility = View.GONE
 
                 val photos = data.marsRoverPhotos.photos
-                if(photos.isNotEmpty()){
+                if (photos.isNotEmpty()) {
                     val dataForAdapter = ArrayList<MarsRoverPhoto>()
-                    for (i in photos){
+                    for (i in photos) {
                         dataForAdapter.add(i.mapToMarsRoverPhoto())
                     }
                     val recyclerView = binding.marsRoverRecyclerView

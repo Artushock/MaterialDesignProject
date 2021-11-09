@@ -7,15 +7,18 @@
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/drawable/ic_baseline_no_photography_24.xml" value="0.24010416666666667" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.24010416666666667" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/drawable/ic_outline_insert_emoticon_24.xml" value="0.24010416666666667" />
+        <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/activity_test_animation.xml" value="0.21910112359550563" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/bottom_sheet_dialog_fragment.xml" value="0.15052083333333333" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/bottom_sheet_layout.xml" value="0.6" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/fragment_chips.xml" value="0.264" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/fragment_day_before_yesterday_photo.xml" value="0.11666666666666667" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/fragment_earth.xml" value="0.1" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/fragment_mars_rover_photos.xml" value="0.16" />
-        <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/fragment_nearest_asteroids.xml" value="0.4" />
+        <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/fragment_nearest_asteroids.xml" value="0.2" />
+        <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/fragment_nearest_asteroids_end.xml" value="0.2234375" />
+        <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/fragment_nearest_asteroids_start.xml" value="0.103125" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/fragment_photo.xml" value="0.21481481481481482" />
-        <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/fragment_photo_of_the_day.xml" value="0.1" />
+        <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/fragment_photo_of_the_day.xml" value="0.264" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/fragment_rovers_on_mars.xml" value="0.16" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/fragment_search.xml" value="0.2" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/fragment_search_start.xml" value="0.2234375" />
@@ -26,9 +29,10 @@
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/main_activity.xml" value="0.10416666666666667" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/main_fragment.xml" value="0.14595660749506903" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/mars_rover_photos_item.xml" value="0.2234375" />
+        <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/test_animation_item.xml" value="0.21910112359550563" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/menu/bottom_app_bar_menu.xml" value="0.1" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.21979166666666666" />
-        <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/menu/mars_rover_photos_menu.xml" value="0.2234375" />
+        <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/menu/mars_rover_photos_menu.xml" value="0.1" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/menu/menu_bottom_app_bar.xml" value="0.21979166666666666" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/menu/menu_bottom_bar.xml" value="0.2234375" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/menu/menu_bottom_navigation.xml" value="0.1" />

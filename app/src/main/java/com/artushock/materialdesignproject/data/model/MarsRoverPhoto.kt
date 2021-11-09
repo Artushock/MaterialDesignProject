@@ -4,5 +4,7 @@ data class MarsRoverPhoto(
     val id: Int,
     val url: String,
     val roverName: String,
-    val date: String
+    val date: String,
+    val cameraName: String,
+    val cameraFullName: String,
 )
