@@ -7,12 +7,10 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.BounceInterpolator
 import android.widget.CompoundButton
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -28,7 +26,6 @@ class PhotoOfTheDayFragment : Fragment() {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
     private var isInfoExpanded = false
-    private var isImageExpanded = false
 
     private var _binding: FragmentPhotoOfTheDayBinding? = null
     private val binding get() = _binding!!
@@ -57,36 +54,6 @@ class PhotoOfTheDayFragment : Fragment() {
         setBottomSheetBehavior(bottomSheetLayout)
         initViewModel()
         initChips()
-        setImageClickAnimation()
-    }
-
-    private fun setImageClickAnimation() {
-        val image = binding.photoImageView
-        val chipGroup = binding.photoOfTheDayChipGroup
-        image.setOnClickListener {
-            isImageExpanded = !isImageExpanded
-            TransitionManager.beginDelayedTransition(
-                binding.photoOfTheDayContainer, TransitionSet()
-                    .addTransition(Fade())
-                    .addTransition(ChangeBounds())
-                    .addTransition(ChangeImageTransform())
-            )
-
-            val params: ViewGroup.LayoutParams = image.layoutParams
-            params.height = if (isImageExpanded)
-                ViewGroup.LayoutParams.MATCH_PARENT
-            else
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            image.layoutParams = params
-
-            if (isImageExpanded) {
-                image.scaleType = ImageView.ScaleType.CENTER_CROP
-                chipGroup.visibility = View.GONE
-            } else {
-                image.scaleType = ImageView.ScaleType.FIT_CENTER
-                chipGroup.visibility = View.VISIBLE
-            }
-        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -125,7 +92,7 @@ class PhotoOfTheDayFragment : Fragment() {
     }
 
     private fun animateChip(chip: CompoundButton?) {
-        val chipAnimationScale = 1.2f
+        val chipAnimationScale = 1.1f
         chip?.let {
             if (chip.isChecked) {
                 chip.animate()
@@ -207,7 +174,7 @@ class PhotoOfTheDayFragment : Fragment() {
     private fun renderData(data: PictureOfTheDayData?) {
         when (data) {
             is PictureOfTheDayData.Success -> {
-                binding.photoImageView.visibility = View.VISIBLE
+                binding.photoView.visibility = View.VISIBLE
                 binding.photoProgressBar.visibility = View.GONE
 
                 val serverResponseData = data.serverResponseData
@@ -225,7 +192,7 @@ class PhotoOfTheDayFragment : Fragment() {
 
             }
             is PictureOfTheDayData.Loading -> {
-                binding.photoImageView.visibility = View.GONE
+                binding.photoView.visibility = View.GONE
                 binding.photoProgressBar.visibility = View.VISIBLE
             }
             is PictureOfTheDayData.Error -> {
@@ -236,11 +203,11 @@ class PhotoOfTheDayFragment : Fragment() {
 
     private fun handleImageUrl(url: String?) {
         binding.videoGottenLayout.visibility = View.GONE
-        binding.photoImageView.visibility = View.VISIBLE
+        binding.photoView.visibility = View.VISIBLE
         if (url.isNullOrEmpty()) {
             Toast.makeText(context, "NASA sent nothing!", Toast.LENGTH_SHORT).show()
         } else {
-            binding.photoImageView.load(url) {
+            binding.photoView.load(url){
                 lifecycle(this@PhotoOfTheDayFragment)
             }
         }
@@ -248,7 +215,7 @@ class PhotoOfTheDayFragment : Fragment() {
 
     private fun handleVideoUrl(url: String?) {
         binding.videoGottenLayout.visibility = View.VISIBLE
-        binding.photoImageView.visibility = View.GONE
+        binding.photoView.visibility = View.GONE
         binding.videoButton.setOnClickListener {
             val i = Intent(Intent.ACTION_VIEW)
             i.data = Uri.parse(url)
