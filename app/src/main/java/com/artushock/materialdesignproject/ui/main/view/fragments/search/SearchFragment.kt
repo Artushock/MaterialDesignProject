@@ -11,11 +11,12 @@ import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.artushock.materialdesignproject.databinding.FragmentSearchBinding
+import com.artushock.materialdesignproject.databinding.FragmentSearchStartBinding
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 
 class SearchFragment : Fragment() {
 
-    private var _binding: FragmentSearchBinding? = null
+    private var _binding: FragmentSearchStartBinding? = null
     private val binding get() = _binding!!
 
     companion object {
@@ -26,7 +27,7 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        _binding = FragmentSearchStartBinding.inflate(inflater, container, false)
         return binding.root
     }
 
