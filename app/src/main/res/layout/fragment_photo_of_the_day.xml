@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.main.view.fragments.photo.PhotoOfTheDayFragment">
+
+    <com.google.android.material.chip.ChipGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="32dp"
+        app:selectionRequired="true"
+        app:singleSelection="true">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/today_photo_chip"
+            style="@style/ChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="3dp"
+            android:text="@string/_today" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/yesterday_photo_chip"
+            style="@style/ChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="3dp"
+            android:text="@string/_yesterday" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/day_before_yesterday_photo_chip"
+            style="@style/ChipStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="3dp"
+            android:text="@string/_the_day_before_yesterday" />
+
+    </com.google.android.material.chip.ChipGroup>
+
+    <com.artushock.materialdesignproject.ui.main.view.custom.EquilateralImageView
+        android:id="@+id/photo_image_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:contentDescription="@string/photo_of_the_day"
+        android:visibility="visible"
+        app:srcCompat="@drawable/ic_baseline_no_photography_24" />
+
+    <LinearLayout
+        android:id="@+id/video_gotten_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/_nasa_video_message"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/video_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/_see_video" />
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/photo_progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_gravity="center" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="84dp"
+        android:contentDescription="@string/photo_of_the_day"
+        android:src="@drawable/ic_baseline_info_24"
+        app:tint="@color/white" />
+
+    <include
+        android:id="@+id/bottom_sheet_info"
+        layout="@layout/info_bottom_sheet_layout" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

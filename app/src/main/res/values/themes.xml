@@ -65,4 +65,11 @@
         <item name="tint">?colorOnPrimary</item>
     </style>
 
+    <style name="BottomNavigationViewStyle" parent="Widget.Design.BottomNavigationView">
+        <item name="itemIconTint">@color/bottom_navigation_icon_color</item>
+        <item name="itemTextColor">@color/bottom_navigation_icon_color</item>
+    </style>
+
+
+
 </resources>

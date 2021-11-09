@@ -1,4 +1,4 @@
-package com.artushock.materialdesignproject.ui.main.view.fragments
+package com.artushock.materialdesignproject.ui.main.view.fragments.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,6 +18,10 @@ class SettingsFragment : Fragment() {
 
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
+
+    companion object {
+        fun newInstance() = SettingsFragment()
+    }
 
 
     override fun onCreateView(

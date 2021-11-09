@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".ui.main.view.fragments.SettingsFragment">
+    tools:context=".ui.main.view.fragments.settings.SettingsFragment">
 
     <TextView
         style="@style/SettingsTextViewStyle"
