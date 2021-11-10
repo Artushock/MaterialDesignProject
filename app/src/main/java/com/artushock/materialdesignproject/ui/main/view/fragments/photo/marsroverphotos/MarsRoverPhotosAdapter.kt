@@ -1,8 +1,11 @@
 package com.artushock.materialdesignproject.ui.main.view.fragments.photo.marsroverphotos
 
+import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.BounceInterpolator
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -12,22 +15,20 @@ import com.squareup.picasso.Picasso
 
 class MarsRoverPhotosAdapter(
     private val listener: OnListItemClickListener,
-    private val data: List<MarsRoverPhoto>,
+    private val data: MutableList<MarsRoverPhoto>,
 ) :
     RecyclerView.Adapter<MarsRoverPhotosBaseViewHolder>() {
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MarsRoverPhotosBaseViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): MarsRoverPhotosBaseViewHolder {
         val inflater = LayoutInflater.from(parent.context)
 
         return when (viewType) {
-            TYPE_WITH_BUTTONS -> {
+            TYPE_PHOTO_CONTAINER -> {
                 MarsRoverPhotosViewHolder(inflater.inflate(R.layout.mars_rover_photos_item,
-                    parent,
-                    false) as View)
-            }
-            TYPE_WITHOUT_BUTTONS -> {
-                MarsRoverPhotosViewHolderWithoutButtons(inflater.inflate(R.layout.mars_rover_photos_item_without_buttons,
                     parent,
                     false) as View)
             }
@@ -48,14 +49,16 @@ class MarsRoverPhotosAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when {
-            position == 0 -> TYPE_HEADER
-            data[position].cameraName == "FHAZ" -> TYPE_WITH_BUTTONS
-            else -> TYPE_WITHOUT_BUTTONS
+        return when (position) {
+            0 -> TYPE_HEADER
+            else -> TYPE_PHOTO_CONTAINER
         }
     }
 
     inner class MarsRoverPhotosViewHolder(view: View) : MarsRoverPhotosBaseViewHolder(view) {
+
+        private var isItemFavorite = false
+
         override fun bind(data: MarsRoverPhoto) {
             val imageView: ImageView = itemView.findViewById(R.id.mars_rover_photos_image_view)
             Picasso.get()
@@ -68,26 +71,49 @@ class MarsRoverPhotosAdapter(
             val textView: TextView = itemView.findViewById(R.id.mars_rover_photos_text_view)
             textView.text =
                 with(data) { "$roverName: $date, ID: $id\n $cameraName: $cameraFullName" }
+
+//            val dropUpImageButton: ImageButton =
+//                itemView.findViewById(R.id.mars_item_image_button_drop_up)
+//            val dropDownImageButton: ImageButton =
+//                itemView.findViewById(R.id.mars_item_image_button_drop_down)
+
+            val deleteImageButton: ImageButton =
+                itemView.findViewById(R.id.mars_item_image_button_delete)
+            deleteImageButton.setOnClickListener { deleteItem() }
+
+            val favoriteImageButton: ImageButton =
+                itemView.findViewById(R.id.mars_item_image_button_favorite)
+            favoriteImageButton.setOnClickListener { setItemFavorite(it as ImageButton) }
+
+//            val hamburgerImageButton: ImageButton =
+//                itemView.findViewById(R.id.mars_item_image_button_hamburger)
+
+
         }
-    }
 
-    inner class MarsRoverPhotosViewHolderWithoutButtons(view: View) :
-        MarsRoverPhotosBaseViewHolder(view) {
-        override fun bind(data: MarsRoverPhoto) {
-            val imageView: ImageView =
-                itemView.findViewById(R.id.mars_rover_photos_without_buttons_image_view)
-            Picasso.get()
-                .load(data.url)
-                .into(imageView)
-
-            imageView.setOnClickListener {
-                listener.onItemClick(data)
+        private fun setItemFavorite(it: ImageButton) {
+            if(isItemFavorite){
+                isItemFavorite = !isItemFavorite
+                it.animate()
+                    .scaleX(1.0f)
+                    .scaleY(1.0f)
+                    .setInterpolator(BounceInterpolator())
+                    .duration = 800
+                it.colorFilter = null
+            } else {
+                isItemFavorite = !isItemFavorite
+                it.animate()
+                    .scaleX(1.5f)
+                    .scaleY(1.5f)
+                    .setInterpolator(BounceInterpolator())
+                    .duration = 800
+                it.setColorFilter(R.color.red, PorterDuff.Mode.MULTIPLY)
             }
+        }
 
-            val textView: TextView =
-                itemView.findViewById(R.id.mars_rover_photos_without_buttons_text_view)
-            textView.text =
-                with(data) { "$roverName: $date, ID: $id\n $cameraName: $cameraFullName" }
+        private fun deleteItem() {
+            data.removeAt(layoutPosition)
+            notifyItemRemoved(layoutPosition)
         }
     }
 
@@ -105,8 +131,7 @@ class MarsRoverPhotosAdapter(
     }
 
     companion object {
-        private const val TYPE_WITH_BUTTONS = 0
-        private const val TYPE_WITHOUT_BUTTONS = 1
-        private const val TYPE_HEADER = 2
+        private const val TYPE_HEADER = 0
+        private const val TYPE_PHOTO_CONTAINER = 1
     }
 }
