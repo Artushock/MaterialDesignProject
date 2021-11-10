@@ -1,6 +1,5 @@
 package com.artushock.materialdesignproject.ui.main.view.fragments.photo.marsroverphotos
 
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -31,7 +30,7 @@ class MarsRoverPhotosFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentMarsRoverPhotosBinding.inflate(layoutInflater, container, false)
         return binding.root
@@ -78,7 +77,7 @@ class MarsRoverPhotosFragment : Fragment() {
     }
 
     private fun setToolbarTitle(photosAmount: Int) {
-        binding.marsRoverToolbarTitle.text = "Curisoity: $date. $photosAmount photo(s)"
+        "Curiosity: $date. $photosAmount photo(s)".also { binding.marsRoverToolbarTitle.text = it }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -121,9 +120,23 @@ class MarsRoverPhotosFragment : Fragment() {
                     for (i in photos) {
                         dataForAdapter.add(i.mapToMarsRoverPhoto())
                     }
+
+                    val roverInfo = with(data.marsRoverPhotos.photos[0].rover) {
+                        "Rover: $name (id: $id)\nLaunch date: $launch_date\nLanding date: $landing_date\nStatus: $status"
+                    }
+                    dataForAdapter.add(0, MarsRoverPhoto(0, roverInfo))
+
                     val recyclerView = binding.marsRoverRecyclerView
                     recyclerView.layoutManager = LinearLayoutManager(context)
-                    recyclerView.adapter = MarsRoverPhotosAdapter(dataForAdapter)
+                    recyclerView.adapter = MarsRoverPhotosAdapter(
+                        object : MarsRoverPhotosAdapter.OnListItemClickListener {
+                            override fun onItemClick(data: MarsRoverPhoto) {
+                                Toast.makeText(context,
+                                    "ID: ${data.id}, ${data.cameraFullName}",
+                                    Toast.LENGTH_SHORT).show()
+                            }
+                        },
+                        dataForAdapter)
                     setToolbarTitle(photos.size)
 
                 } else {

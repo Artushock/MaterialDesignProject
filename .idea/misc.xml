@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/drawable/ic_baseline_dehaze_24.xml" value="0.24010416666666667" />
+        <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/drawable/ic_baseline_favorite_24.xml" value="0.2390194075587334" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/drawable/ic_baseline_no_photography_24.xml" value="0.24010416666666667" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.24010416666666667" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/drawable/ic_outline_insert_emoticon_24.xml" value="0.24010416666666667" />
@@ -28,7 +29,9 @@
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/info_bottom_sheet_layout.xml" value="0.264" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/main_activity.xml" value="0.10416666666666667" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/main_fragment.xml" value="0.14595660749506903" />
-        <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/mars_rover_photos_item.xml" value="0.2234375" />
+        <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/mars_rover_photos_item.xml" value="0.1" />
+        <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/mars_rover_photos_item_header.xml" value="0.2234375" />
+        <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/mars_rover_photos_item_without_buttons.xml" value="0.2234375" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/layout/test_animation_item.xml" value="0.21910112359550563" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/menu/bottom_app_bar_menu.xml" value="0.1" />
         <entry key="..\:/JavaProjects/GeekBrains/MaterialDesignProject/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.21979166666666666" />
