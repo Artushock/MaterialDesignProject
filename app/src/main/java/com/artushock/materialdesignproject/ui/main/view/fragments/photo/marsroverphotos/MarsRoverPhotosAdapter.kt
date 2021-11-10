@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.view.animation.BounceInterpolator
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.artushock.materialdesignproject.R
@@ -15,7 +16,7 @@ import com.squareup.picasso.Picasso
 
 class MarsRoverPhotosAdapter(
     private val listener: OnListItemClickListener,
-    private val data: MutableList<MarsRoverPhoto>,
+    private val data: MutableList<Pair<MarsRoverPhoto, Boolean>>,
 ) :
     RecyclerView.Adapter<MarsRoverPhotosBaseViewHolder>() {
 
@@ -59,23 +60,30 @@ class MarsRoverPhotosAdapter(
 
         private var isItemFavorite = false
 
-        override fun bind(data: MarsRoverPhoto) {
+        override fun bind(data: Pair<MarsRoverPhoto, Boolean>) {
             val imageView: ImageView = itemView.findViewById(R.id.mars_rover_photos_image_view)
             Picasso.get()
-                .load(data.url)
+                .load(data.first.url)
                 .into(imageView)
+
+            val buttonLine: LinearLayout = itemView.findViewById(R.id.mars_item_image_button_line)
+            buttonLine.visibility = if (data.second) View.VISIBLE else View.GONE
+
             imageView.setOnClickListener {
-                listener.onItemClick(data)
+                toggleButtonLine()
             }
 
             val textView: TextView = itemView.findViewById(R.id.mars_rover_photos_text_view)
             textView.text =
-                with(data) { "$roverName: $date, ID: $id\n $cameraName: $cameraFullName" }
+                with(data.first) { "$roverName: $date, ID: $id\n $cameraName: $cameraFullName" }
 
-//            val dropUpImageButton: ImageButton =
-//                itemView.findViewById(R.id.mars_item_image_button_drop_up)
-//            val dropDownImageButton: ImageButton =
-//                itemView.findViewById(R.id.mars_item_image_button_drop_down)
+            val dropUpImageButton: ImageButton =
+                itemView.findViewById(R.id.mars_item_image_button_drop_up)
+            dropUpImageButton.setOnClickListener { moveUp() }
+
+            val dropDownImageButton: ImageButton =
+                itemView.findViewById(R.id.mars_item_image_button_drop_down)
+            dropDownImageButton.setOnClickListener { moveDown() }
 
             val deleteImageButton: ImageButton =
                 itemView.findViewById(R.id.mars_item_image_button_delete)
@@ -85,14 +93,38 @@ class MarsRoverPhotosAdapter(
                 itemView.findViewById(R.id.mars_item_image_button_favorite)
             favoriteImageButton.setOnClickListener { setItemFavorite(it as ImageButton) }
 
-//            val hamburgerImageButton: ImageButton =
-//                itemView.findViewById(R.id.mars_item_image_button_hamburger)
-
+            val hamburgerImageButton: ImageButton =
+                itemView.findViewById(R.id.mars_item_image_button_hamburger)
 
         }
 
+        private fun toggleButtonLine() {
+            data[layoutPosition] = data[layoutPosition].let { it: Pair<MarsRoverPhoto, Boolean> ->
+                it.first to !it.second
+            }
+            notifyItemChanged(layoutPosition)
+        }
+
+        private fun moveUp() {
+            layoutPosition.takeIf { it > 1 }?.also { currentPosition ->
+                data.removeAt(currentPosition).apply {
+                    data.add(currentPosition - 1, this)
+                }
+                notifyItemMoved(currentPosition, currentPosition - 1)
+            }
+        }
+
+        private fun moveDown() {
+            layoutPosition.takeIf { it < data.size - 1 }?.also { currentPosition ->
+                data.removeAt(currentPosition).apply {
+                    data.add(currentPosition + 1, this)
+                }
+                notifyItemMoved(currentPosition, currentPosition + 1)
+            }
+        }
+
         private fun setItemFavorite(it: ImageButton) {
-            if(isItemFavorite){
+            if (isItemFavorite) {
                 isItemFavorite = !isItemFavorite
                 it.animate()
                     .scaleX(1.0f)
@@ -119,10 +151,10 @@ class MarsRoverPhotosAdapter(
 
     inner class MarsRoverPhotosViewHolderHeader(view: View) :
         MarsRoverPhotosBaseViewHolder(view) {
-        override fun bind(data: MarsRoverPhoto) {
+        override fun bind(data: Pair<MarsRoverPhoto, Boolean>) {
             val textView: TextView =
                 itemView.findViewById(R.id.mars_rover_photos_item_header_text)
-            textView.text = data.url
+            textView.text = data.first.url
         }
     }
 

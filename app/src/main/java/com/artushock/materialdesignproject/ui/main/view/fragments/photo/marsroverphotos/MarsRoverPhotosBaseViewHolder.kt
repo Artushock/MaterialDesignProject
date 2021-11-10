@@ -5,5 +5,5 @@ import androidx.recyclerview.widget.RecyclerView
 import com.artushock.materialdesignproject.data.model.MarsRoverPhoto
 
 abstract class MarsRoverPhotosBaseViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    abstract fun bind(data: MarsRoverPhoto)
-} 
+    abstract fun bind(data: Pair<MarsRoverPhoto, Boolean>)
+}

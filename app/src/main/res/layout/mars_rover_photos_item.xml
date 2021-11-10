@@ -1,48 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <LinearLayout
+        android:id="@+id/mars_item_image_button_line"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="16dp"
+        android:background="@color/black"
         android:elevation="12dp"
-        android:gravity="end">
+        android:gravity="end"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mars_rover_photos_image_view">
 
         <ImageButton
             android:id="@+id/mars_item_image_button_drop_up"
             android:layout_width="48dp"
             android:layout_height="32dp"
             android:background="@null"
-            android:src="@drawable/ic_baseline_arrow_drop_up_24"
-            android:contentDescription="@string/_drop_up_button" />
+            android:contentDescription="@string/_drop_up_button"
+            android:src="@drawable/ic_baseline_arrow_drop_up_24" />
 
         <ImageButton
             android:id="@+id/mars_item_image_button_drop_down"
             android:layout_width="48dp"
             android:layout_height="32dp"
             android:background="@null"
-            android:src="@drawable/ic_baseline_arrow_drop_down_24"
-            android:contentDescription="@string/_drop_down_button" />
+            android:contentDescription="@string/_drop_down_button"
+            android:src="@drawable/ic_baseline_arrow_drop_down_24" />
 
         <ImageButton
             android:id="@+id/mars_item_image_button_favorite"
             android:layout_width="48dp"
             android:layout_height="32dp"
             android:background="@null"
-            android:src="@drawable/ic_baseline_favorite_24"
-            android:contentDescription="@string/_favorite_button" />
+            android:contentDescription="@string/_favorite_button"
+            android:src="@drawable/ic_baseline_favorite_24" />
 
         <ImageButton
             android:id="@+id/mars_item_image_button_delete"
             android:layout_width="48dp"
             android:layout_height="32dp"
             android:background="@null"
-            android:src="@drawable/ic_baseline_delete_24"
-            android:contentDescription="@string/_delete_button" />
+            android:contentDescription="@string/_delete_button"
+            android:src="@drawable/ic_baseline_delete_24" />
 
 
         <ImageButton
@@ -50,16 +56,27 @@
             android:layout_width="48dp"
             android:layout_height="32dp"
             android:background="@null"
-            android:src="@drawable/ic_baseline_hamburger_24"
-            android:contentDescription="@string/_hamburger_button" />
+            android:contentDescription="@string/_hamburger_button"
+            android:src="@drawable/ic_baseline_hamburger_24" />
 
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:background="?colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mars_item_image_button_line" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/mars_rover_photos_image_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:adjustViewBounds="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/ic_baseline_no_photography_24" />
 
     <TextView
@@ -71,6 +88,8 @@
         android:layout_marginBottom="8dp"
         android:gravity="end"
         android:textColor="?colorSecondary"
+        app:layout_constraintBottom_toBottomOf="@id/mars_rover_photos_image_view"
+        app:layout_constraintStart_toStartOf="parent"
         tools:text="Curiosity: 2021-10-30" />
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

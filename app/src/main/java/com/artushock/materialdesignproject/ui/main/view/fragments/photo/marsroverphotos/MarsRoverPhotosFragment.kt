@@ -25,7 +25,7 @@ class MarsRoverPhotosFragment : Fragment() {
     private var date: String = "2019-04-12"
 
     private val viewModel: MarsRoverPhotosViewModel by lazy {
-        ViewModelProvider(this).get(MarsRoverPhotosViewModel::class.java)
+        ViewModelProvider(this)[MarsRoverPhotosViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -116,15 +116,15 @@ class MarsRoverPhotosFragment : Fragment() {
 
                 val photos = data.marsRoverPhotos.photos
                 if (photos.isNotEmpty()) {
-                    val dataForAdapter = ArrayList<MarsRoverPhoto>()
+                    val dataForAdapter = ArrayList<Pair<MarsRoverPhoto, Boolean>>()
                     for (i in photos) {
-                        dataForAdapter.add(i.mapToMarsRoverPhoto())
+                        dataForAdapter.add(Pair(i.mapToMarsRoverPhoto(),false))
                     }
 
                     val roverInfo = with(data.marsRoverPhotos.photos[0].rover) {
                         "Rover: $name (id: $id)\nLaunch date: $launch_date\nLanding date: $landing_date\nStatus: $status"
                     }
-                    dataForAdapter.add(0, MarsRoverPhoto(0, roverInfo))
+                    dataForAdapter.add(0, Pair(MarsRoverPhoto(0, roverInfo), false))
 
                     val recyclerView = binding.marsRoverRecyclerView
                     recyclerView.layoutManager = LinearLayoutManager(context)
