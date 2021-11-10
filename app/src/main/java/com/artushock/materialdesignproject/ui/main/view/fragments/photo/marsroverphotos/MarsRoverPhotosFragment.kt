@@ -118,7 +118,7 @@ class MarsRoverPhotosFragment : Fragment() {
                 if (photos.isNotEmpty()) {
                     val dataForAdapter = ArrayList<Pair<MarsRoverPhoto, Boolean>>()
                     for (i in photos) {
-                        dataForAdapter.add(Pair(i.mapToMarsRoverPhoto(),false))
+                        dataForAdapter.add(Pair(i.mapToMarsRoverPhoto(), false))
                     }
 
                     val roverInfo = with(data.marsRoverPhotos.photos[0].rover) {
@@ -128,15 +128,7 @@ class MarsRoverPhotosFragment : Fragment() {
 
                     val recyclerView = binding.marsRoverRecyclerView
                     recyclerView.layoutManager = LinearLayoutManager(context)
-                    recyclerView.adapter = MarsRoverPhotosAdapter(
-                        object : MarsRoverPhotosAdapter.OnListItemClickListener {
-                            override fun onItemClick(data: MarsRoverPhoto) {
-                                Toast.makeText(context,
-                                    "ID: ${data.id}, ${data.cameraFullName}",
-                                    Toast.LENGTH_SHORT).show()
-                            }
-                        },
-                        dataForAdapter)
+                    recyclerView.adapter = MarsRoverPhotosAdapter(dataForAdapter)
                     setToolbarTitle(photos.size)
 
                 } else {

@@ -15,7 +15,6 @@ import com.artushock.materialdesignproject.data.model.MarsRoverPhoto
 import com.squareup.picasso.Picasso
 
 class MarsRoverPhotosAdapter(
-    private val listener: OnListItemClickListener,
     private val data: MutableList<Pair<MarsRoverPhoto, Boolean>>,
 ) :
     RecyclerView.Adapter<MarsRoverPhotosBaseViewHolder>() {
@@ -95,11 +94,16 @@ class MarsRoverPhotosAdapter(
 
             val hamburgerImageButton: ImageButton =
                 itemView.findViewById(R.id.mars_item_image_button_hamburger)
+            hamburgerImageButton.setOnClickListener { hamburgerCLicked() }
 
         }
 
+        private fun hamburgerCLicked() {
+            TODO("Not yet implemented")
+        }
+
         private fun toggleButtonLine() {
-            data[layoutPosition] = data[layoutPosition].let { it: Pair<MarsRoverPhoto, Boolean> ->
+            data[layoutPosition] = data[layoutPosition].let {
                 it.first to !it.second
             }
             notifyItemChanged(layoutPosition)
@@ -156,10 +160,6 @@ class MarsRoverPhotosAdapter(
                 itemView.findViewById(R.id.mars_rover_photos_item_header_text)
             textView.text = data.first.url
         }
-    }
-
-    interface OnListItemClickListener {
-        fun onItemClick(data: MarsRoverPhoto)
     }
 
     companion object {
