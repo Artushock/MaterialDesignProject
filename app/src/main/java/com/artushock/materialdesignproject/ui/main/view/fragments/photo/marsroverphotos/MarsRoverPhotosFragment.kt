@@ -2,6 +2,7 @@ package com.artushock.materialdesignproject.ui.main.view.fragments.photo.marsrov
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,9 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.artushock.materialdesignproject.R
 import com.artushock.materialdesignproject.data.model.MarsRoverPhoto
 import com.artushock.materialdesignproject.data.model.MarsRoverPhotosData
@@ -23,6 +26,8 @@ class MarsRoverPhotosFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var date: String = "2019-04-12"
+
+    lateinit var itemTouchHelper: ItemTouchHelper
 
     private val viewModel: MarsRoverPhotosViewModel by lazy {
         ViewModelProvider(this)[MarsRoverPhotosViewModel::class.java]
@@ -116,6 +121,7 @@ class MarsRoverPhotosFragment : Fragment() {
 
                 val photos = data.marsRoverPhotos.photos
                 if (photos.isNotEmpty()) {
+
                     val dataForAdapter = ArrayList<Pair<MarsRoverPhoto, Boolean>>()
                     for (i in photos) {
                         dataForAdapter.add(Pair(i.mapToMarsRoverPhoto(), false))
@@ -126,11 +132,25 @@ class MarsRoverPhotosFragment : Fragment() {
                     }
                     dataForAdapter.add(0, Pair(MarsRoverPhoto(0, roverInfo), false))
 
+                    Log.d(TAG, "dataForAdapter: ${dataForAdapter::class.java.hashCode()}")
+
                     val recyclerView = binding.marsRoverRecyclerView
                     recyclerView.layoutManager = LinearLayoutManager(context)
-                    recyclerView.adapter = MarsRoverPhotosAdapter(dataForAdapter)
-                    setToolbarTitle(photos.size)
 
+                    val adapter = MarsRoverPhotosAdapter(
+                        dataForAdapter,
+                        object : MarsRoverPhotosAdapter.OnStartDragListener {
+                            override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
+                                itemTouchHelper.startDrag(viewHolder)
+                            }
+                        }
+                        )
+
+                    recyclerView.adapter = adapter
+                    itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback(adapter))
+                    itemTouchHelper.attachToRecyclerView(recyclerView)
+
+                    setToolbarTitle(photos.size)
                 } else {
                     showMessage("There aren't photos this day!")
                 }
@@ -150,6 +170,10 @@ class MarsRoverPhotosFragment : Fragment() {
         val marsRoverTextView = binding.marsRoverTextView
         marsRoverTextView.visibility = View.VISIBLE
         marsRoverTextView.text = message
+    }
+
+    companion object {
+        private const val TAG = "123123123345-"
     }
 
 }

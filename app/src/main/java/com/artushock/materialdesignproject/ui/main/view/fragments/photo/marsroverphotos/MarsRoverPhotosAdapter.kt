@@ -1,7 +1,11 @@
 package com.artushock.materialdesignproject.ui.main.view.fragments.photo.marsroverphotos
 
+import android.annotation.SuppressLint
+import android.graphics.Color
 import android.graphics.PorterDuff
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.BounceInterpolator
@@ -9,6 +13,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.graphics.blue
 import androidx.recyclerview.widget.RecyclerView
 import com.artushock.materialdesignproject.R
 import com.artushock.materialdesignproject.data.model.MarsRoverPhoto
@@ -16,9 +21,12 @@ import com.squareup.picasso.Picasso
 
 class MarsRoverPhotosAdapter(
     private val data: MutableList<Pair<MarsRoverPhoto, Boolean>>,
-) :
-    RecyclerView.Adapter<MarsRoverPhotosBaseViewHolder>() {
+    private val dragListener: OnStartDragListener,
+) : RecyclerView.Adapter<MarsRoverPhotosBaseViewHolder>(), ItemTouchHelperAdapter {
 
+    init {
+        Log.d(TAG, "init: ${data.size}")
+    }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -55,10 +63,12 @@ class MarsRoverPhotosAdapter(
         }
     }
 
-    inner class MarsRoverPhotosViewHolder(view: View) : MarsRoverPhotosBaseViewHolder(view) {
+    inner class MarsRoverPhotosViewHolder(view: View) : MarsRoverPhotosBaseViewHolder(view),
+        ItemTouchHelperViewHolder {
 
         private var isItemFavorite = false
 
+        @SuppressLint("ClickableViewAccessibility")
         override fun bind(data: Pair<MarsRoverPhoto, Boolean>) {
             val imageView: ImageView = itemView.findViewById(R.id.mars_rover_photos_image_view)
             Picasso.get()
@@ -94,12 +104,25 @@ class MarsRoverPhotosAdapter(
 
             val hamburgerImageButton: ImageButton =
                 itemView.findViewById(R.id.mars_item_image_button_hamburger)
-            hamburgerImageButton.setOnClickListener { hamburgerCLicked() }
+            hamburgerImageButton.performClick()
 
+            hamburgerImageButton.setOnTouchListener { _, motionEvent ->
+                when (motionEvent?.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        dragListener.onStartDrag(this@MarsRoverPhotosViewHolder)
+                        true
+                    }
+                    else -> false
+                }
+            }
         }
 
-        private fun hamburgerCLicked() {
-            TODO("Not yet implemented")
+        override fun onItemSelected() {
+            itemView.setBackgroundColor(Color.LTGRAY)
+        }
+
+        override fun onItemClear() {
+            itemView.setBackgroundColor(Color.WHITE)
         }
 
         private fun toggleButtonLine() {
@@ -148,22 +171,60 @@ class MarsRoverPhotosAdapter(
         }
 
         private fun deleteItem() {
+            Log.d(TAG,
+                "deleteItem() data.size: ${data.size} data.hashCode(): ${data.hashCode()}").blue
             data.removeAt(layoutPosition)
+            Log.d(TAG,
+                "MarsRoverPhotosAdapter.deleteItem() : $layoutPosition data.size: ${data.size}")
             notifyItemRemoved(layoutPosition)
+            Log.d(TAG,
+                "MarsRoverPhotosAdapter.deleteItem() : notifyItemRemoved($layoutPosition) data.size: ${data.size}")
         }
     }
 
     inner class MarsRoverPhotosViewHolderHeader(view: View) :
-        MarsRoverPhotosBaseViewHolder(view) {
+        MarsRoverPhotosBaseViewHolder(view), ItemTouchHelperViewHolder {
         override fun bind(data: Pair<MarsRoverPhoto, Boolean>) {
             val textView: TextView =
                 itemView.findViewById(R.id.mars_rover_photos_item_header_text)
             textView.text = data.first.url
         }
+
+        override fun onItemSelected() {
+            itemView.setBackgroundColor(0)
+        }
+
+        override fun onItemClear() {
+            itemView.setBackgroundColor(0)
+        }
+    }
+
+    override fun onItemMove(fromPosition: Int, toPosition: Int) {
+        data.removeAt(fromPosition).apply {
+            data.add(if (toPosition > fromPosition) toPosition - 1 else toPosition, this)
+        }
+        notifyItemMoved(fromPosition, toPosition)
+    }
+
+    override fun onItemDismiss(position: Int) {
+        Log.d(TAG,
+            "onItemDismiss(position = $position) data.size: ${data.size}  data.hashCode(): ${data.hashCode()}")
+        data.removeAt(position)
+        Log.d(TAG,
+            "MarsRoverPhotosAdapter.onItemDismiss(position = $position) data.size: ${data.size}")
+        notifyItemRemoved(position)
+        Log.d(TAG,
+            "MarsRoverPhotosAdapter.onItemDismiss(position = $position) : notifyItemRemoved($position) data.size: ${data.size}")
     }
 
     companion object {
         private const val TYPE_HEADER = 0
         private const val TYPE_PHOTO_CONTAINER = 1
+
+        private const val TAG = "123123123345-"
+    }
+
+    interface OnStartDragListener {
+        fun onStartDrag(viewHolder: RecyclerView.ViewHolder)
     }
 }
