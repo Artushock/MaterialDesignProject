@@ -35,8 +35,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    tools:text="Curiosity: 2019-04-12"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"
+                    tools:text="Curiosity: 2019-04-12" />
 
             </androidx.appcompat.widget.Toolbar>
 
@@ -48,9 +48,10 @@
         android:id="@+id/mars_rover_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="?actionBarSize"
         android:layout_below="@+id/app_bar"
         android:layout_gravity="top"
+        android:layout_marginBottom="?actionBarSize"
+        android:background="@color/dark_grey"
         android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
@@ -88,7 +89,7 @@
 
         <View
             android:layout_width="24dp"
-            android:layout_height="0dp"/>
+            android:layout_height="0dp" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/mars_rover_next_day_chip"
