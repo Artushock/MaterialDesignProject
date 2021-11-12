@@ -14,6 +14,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.graphics.blue
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.artushock.materialdesignproject.R
 import com.artushock.materialdesignproject.data.model.MarsRoverPhoto
@@ -50,6 +51,41 @@ class MarsRoverPhotosAdapter(
 
     override fun onBindViewHolder(holder: MarsRoverPhotosBaseViewHolder, position: Int) {
         holder.bind(data[position])
+    }
+
+    override fun onBindViewHolder(
+        holder: MarsRoverPhotosBaseViewHolder,
+        position: Int,
+        payloads: MutableList<Any>,
+    ) {
+        if (payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            val combinedChange =
+                createCombinedPayload(payloads as List<Change<Pair<MarsRoverPhoto, Boolean>>>)
+            val oldData = combinedChange.oldData
+            val newData = combinedChange.newData
+
+            if (newData.first.date != oldData.first.date) {
+                holder.itemView.findViewById<TextView>(R.id.mars_rover_photos_text_view)
+                    .text =
+                    with(newData.first) { "$roverName: $date, ID: $id\n $cameraName: $cameraFullName" }
+            }
+
+            if (newData.first.url != oldData.first.url) {
+                val imageView =
+                    holder.itemView.findViewById<ImageView>(R.id.mars_rover_photos_image_view)
+                Picasso.get()
+                    .load(newData.first.url)
+                    .into(imageView)
+            }
+
+            if (newData.second != oldData.second) {
+                val buttonLine =
+                    holder.itemView.findViewById<LinearLayout>(R.id.mars_item_image_button_line)
+                buttonLine.visibility = if (newData.second) View.VISIBLE else View.GONE
+            }
+        }
     }
 
     override fun getItemCount(): Int {
@@ -217,6 +253,39 @@ class MarsRoverPhotosAdapter(
             "MarsRoverPhotosAdapter.onItemDismiss(position = $position) : notifyItemRemoved($position) data.size: ${data.size}")
     }
 
+    fun setItems(newItems: List<Pair<MarsRoverPhoto, Boolean>>){
+        val result = DiffUtil.calculateDiff(DiffUtilsCallBack(data, newItems))
+        result.dispatchUpdatesTo(this)
+        data.clear()
+        data.addAll(newItems)
+    }
+
+    inner class DiffUtilsCallBack(
+        private val oldItems: List<Pair<MarsRoverPhoto, Boolean>>,
+        private val newItems: List<Pair<MarsRoverPhoto, Boolean>>,
+    ) : DiffUtil.Callback() {
+        override fun getOldListSize(): Int = oldItems.size
+
+        override fun getNewListSize(): Int = newItems.size
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
+            oldItems[oldItemPosition].first.id == newItems[oldItemPosition].first.id
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            val oldItem = oldItems[oldItemPosition].first
+            val newItem = newItems[newItemPosition].first
+
+            return oldItem.url == newItem.url && oldItem.date == newItem.date
+        }
+
+        override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any {
+            val oldItem = oldItems[oldItemPosition]
+            val newItem = newItems[newItemPosition]
+
+            return Change(oldItem, newItem)
+        }
+    }
+
     companion object {
         private const val TYPE_HEADER = 0
         private const val TYPE_PHOTO_CONTAINER = 1
@@ -228,3 +297,4 @@ class MarsRoverPhotosAdapter(
         fun onStartDrag(viewHolder: RecyclerView.ViewHolder)
     }
 }
+
