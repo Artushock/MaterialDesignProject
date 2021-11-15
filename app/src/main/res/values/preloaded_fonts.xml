@@ -2,5 +2,6 @@
 <resources>
     <array name="preloaded_fonts" translatable="false">
         <item>@font/crimson_text_bold</item>
+        <item>@font/pacifico</item>
     </array>
 </resources>

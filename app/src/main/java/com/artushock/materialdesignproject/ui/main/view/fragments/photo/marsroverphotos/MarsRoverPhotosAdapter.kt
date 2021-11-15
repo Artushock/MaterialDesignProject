@@ -223,6 +223,7 @@ class MarsRoverPhotosAdapter(
         override fun bind(data: Pair<MarsRoverPhoto, Boolean>) {
             val textView: TextView =
                 itemView.findViewById(R.id.mars_rover_photos_item_header_text)
+
             textView.text = data.first.url
         }
 
