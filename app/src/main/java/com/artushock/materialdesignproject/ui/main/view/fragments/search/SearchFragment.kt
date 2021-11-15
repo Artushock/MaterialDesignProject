@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,6 +42,16 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initTextInputLayout()
+
+        initTextView()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun initTextView() {
+        val textHtml = "<h1>Header</h1><br><p>Some paragraph</p><p>Some list</p><ul><li>First element</li><li>Second element</li></ul>"
+        with(binding.fragmentSearchTextView){
+            this.text = Html.fromHtml(textHtml, Html.FROM_HTML_SEPARATOR_LINE_BREAK_DIV)
+        }
     }
 
 
