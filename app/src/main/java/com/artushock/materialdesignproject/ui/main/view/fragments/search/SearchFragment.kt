@@ -1,19 +1,24 @@
 package com.artushock.materialdesignproject.ui.main.view.fragments.search
 
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.text.Html
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.AbsoluteSizeSpan
+import android.text.style.BackgroundColorSpan
+import android.text.style.BulletSpan
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.annotation.RequiresApi
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
-import com.artushock.materialdesignproject.databinding.FragmentSearchBinding
 import com.artushock.materialdesignproject.databinding.FragmentSearchStartBinding
-import com.google.android.material.bottomsheet.BottomSheetBehavior
+import java.util.*
 
 class SearchFragment : Fragment() {
 
@@ -26,7 +31,7 @@ class SearchFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentSearchStartBinding.inflate(inflater, container, false)
         return binding.root
@@ -37,23 +42,79 @@ class SearchFragment : Fragment() {
         _binding = null
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         initTextInputLayout()
-
         initTextView()
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
+
+    @RequiresApi(Build.VERSION_CODES.P)
     private fun initTextView() {
-        val textHtml = "<h1>Header</h1><br><p>Some paragraph</p><p>Some list</p><ul><li>First element</li><li>Second element</li></ul>"
-        with(binding.fragmentSearchTextView){
-            this.text = Html.fromHtml(textHtml, Html.FROM_HTML_SEPARATOR_LINE_BREAK_DIV)
+        with(binding.fragmentSearchTextView) {
+            val spannable = getSpannable()
+            this.text = spannable
+            this.setOnClickListener {
+                (it as TextView).text = getSpannable()
+            }
+
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
+    private fun getSpannable(): Spannable {
+        val spannable = SpannableString("My text \nbullet one\nbullet two\nbullet three")
+
+        val matches = Regex("bullet\\s").findAll(spannable)
+        matches.forEach { f ->
+            val idxFirst = f.range.first
+            val idxLast = f.range.last
+
+            spannable.setSpan(
+                BulletSpan(50, Color.RED, (10..30).random()),
+                idxFirst,
+                idxLast,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+
+        val mat = Regex("[a-zA-Z]").findAll(spannable)
+        mat.forEach { f ->
+            val idxFirst = f.range.first
+            val idxLast = f.range.last + 1
+
+            var red = (30..255).random()
+            var green = (30..255).random()
+            var blue = (30..255).random()
+            var color = Color.argb(255, red, green, blue)
+
+            spannable.setSpan(
+                ForegroundColorSpan(color),
+                idxFirst, idxLast,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+
+            spannable.setSpan(
+                AbsoluteSizeSpan((50..150).random()),
+                idxFirst, idxLast,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+
+            if(Random().nextBoolean()){
+                red = (30..255).random()
+                green = (30..255).random()
+                blue = (30..255).random()
+                color = Color.argb(255, red, green, blue)
+                spannable.setSpan(
+                    BackgroundColorSpan(color),
+                    idxFirst, idxLast,
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            }
+        }
+        return spannable
+    }
 
     private fun initTextInputLayout() {
         binding.inputLayout.setEndIconOnClickListener {
