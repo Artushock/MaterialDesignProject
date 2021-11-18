@@ -63,4 +63,6 @@
     <string name="_favorite_button">Favorite button</string>
     <string name="_delete_button">Delete button</string>
     <string name="_hamburger_button">Hamburger button</string>
+    <string name="_app_version">version 1.0.0.</string>
+    <string name="_created_by_artushock">Created by Artushock</string>
 </resources>
