@@ -70,6 +70,10 @@
         <item name="itemTextColor">@color/bottom_navigation_icon_color</item>
     </style>
 
+    <style name="AppTheme.Splash">
+        <item name="android:windowBackground">@drawable/splash_background_drawable</item>
+    </style>
+
 
 
 </resources>

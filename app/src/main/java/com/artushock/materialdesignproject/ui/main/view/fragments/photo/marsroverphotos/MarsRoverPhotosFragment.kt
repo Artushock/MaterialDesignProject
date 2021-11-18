@@ -1,6 +1,5 @@
 package com.artushock.materialdesignproject.ui.main.view.fragments.photo.marsroverphotos
 
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,9 +9,12 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.artushock.materialdesignproject.R
 import com.artushock.materialdesignproject.data.model.MarsRoverPhoto
+import com.artushock.materialdesignproject.data.model.MarsRoverPhotosDTO
 import com.artushock.materialdesignproject.data.model.MarsRoverPhotosData
 import com.artushock.materialdesignproject.databinding.FragmentMarsRoverPhotosBinding
 import java.time.LocalDate
@@ -25,13 +27,30 @@ class MarsRoverPhotosFragment : Fragment() {
 
     private var date: String = "2019-04-12"
 
-    private val viewModel: MarsRoverPhotosViewModel by lazy {
-        ViewModelProvider(this).get(MarsRoverPhotosViewModel::class.java)
+    private val adapter by lazy {
+        MarsRoverPhotosAdapter(
+            mutableListOf(),
+            object : MarsRoverPhotosAdapter.OnStartDragListener {
+                override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
+                    itemTouchHelper.startDrag(viewHolder)
+                }
+            }
+        )
     }
+
+    private val viewModel: MarsRoverPhotosViewModel by lazy {
+        ViewModelProvider(this)[MarsRoverPhotosViewModel::class.java]
+    }
+
+    private val recyclerView by lazy {
+        binding.marsRoverRecyclerView
+    }
+
+    lateinit var itemTouchHelper: ItemTouchHelper
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentMarsRoverPhotosBinding.inflate(layoutInflater, container, false)
         return binding.root
@@ -53,6 +72,15 @@ class MarsRoverPhotosFragment : Fragment() {
         initChips()
 
         initViewModel(date)
+
+        initRecyclerView()
+    }
+
+    private fun initRecyclerView() {
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = adapter
+        itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback(adapter))
+        itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
     private fun initToolbar() {
@@ -78,7 +106,7 @@ class MarsRoverPhotosFragment : Fragment() {
     }
 
     private fun setToolbarTitle(photosAmount: Int) {
-        binding.marsRoverToolbarTitle.text = "Curisoity: $date. $photosAmount photo(s)"
+        "Curiosity: $date. $photosAmount photo(s)".also { binding.marsRoverToolbarTitle.text = it }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -102,30 +130,28 @@ class MarsRoverPhotosFragment : Fragment() {
     private fun renderData(data: MarsRoverPhotosData) {
         when (data) {
             is MarsRoverPhotosData.Loading -> {
-                binding.marsRoverProgressBar.visibility = View.VISIBLE
-                binding.marsRoverChipsLayout.visibility = View.GONE
-                binding.marsRoverRecyclerView.visibility = View.GONE
-                binding.marsRoverAppbar.visibility = View.GONE
-                binding.marsRoverTextView.visibility = View.GONE
+                setLayoutElementsVisibility(
+                    progressBarVisibility = true,
+                    chipsVisibility = false,
+                    recyclerViewVisibility = false,
+                    appBarVisibility = false,
+                    textViewVisibility = false
+                )
             }
             is MarsRoverPhotosData.Success -> {
-                binding.marsRoverProgressBar.visibility = View.GONE
-                binding.marsRoverChipsLayout.visibility = View.VISIBLE
-                binding.marsRoverRecyclerView.visibility = View.VISIBLE
-                binding.marsRoverAppbar.visibility = View.VISIBLE
-                binding.marsRoverTextView.visibility = View.GONE
+                setLayoutElementsVisibility(
+                    progressBarVisibility = false,
+                    chipsVisibility = true,
+                    recyclerViewVisibility = true,
+                    appBarVisibility = true,
+                    textViewVisibility = false
+                )
 
                 val photos = data.marsRoverPhotos.photos
                 if (photos.isNotEmpty()) {
-                    val dataForAdapter = ArrayList<MarsRoverPhoto>()
-                    for (i in photos) {
-                        dataForAdapter.add(i.mapToMarsRoverPhoto())
-                    }
-                    val recyclerView = binding.marsRoverRecyclerView
-                    recyclerView.layoutManager = LinearLayoutManager(context)
-                    recyclerView.adapter = MarsRoverPhotosAdapter(dataForAdapter)
+                    val newData = mapDataForAdapter(photos)
+                    adapter.setItems(newData)
                     setToolbarTitle(photos.size)
-
                 } else {
                     showMessage("There aren't photos this day!")
                 }
@@ -136,15 +162,47 @@ class MarsRoverPhotosFragment : Fragment() {
         }
     }
 
-    private fun showMessage(message: String) {
-        binding.marsRoverProgressBar.visibility = View.GONE
-        binding.marsRoverChipsLayout.visibility = View.VISIBLE
-        binding.marsRoverRecyclerView.visibility = View.GONE
-        binding.marsRoverAppbar.visibility = View.VISIBLE
+    private fun setLayoutElementsVisibility(
+        progressBarVisibility: Boolean,
+        chipsVisibility: Boolean,
+        recyclerViewVisibility: Boolean,
+        appBarVisibility: Boolean,
+        textViewVisibility: Boolean,
+    ) {
+        with(binding) {
+            marsRoverProgressBar.visibility = if (progressBarVisibility) View.VISIBLE else View.GONE
+            marsRoverChipsLayout.visibility = if (chipsVisibility) View.VISIBLE else View.GONE
+            marsRoverRecyclerView.visibility =
+                if (recyclerViewVisibility) View.VISIBLE else View.GONE
+            marsRoverAppbar.visibility = if (appBarVisibility) View.VISIBLE else View.GONE
+            marsRoverTextView.visibility = if (textViewVisibility) View.VISIBLE else View.GONE
+        }
+    }
 
+    private fun mapDataForAdapter(photos: MutableList<MarsRoverPhotosDTO.Photo>): List<Pair<MarsRoverPhoto, Boolean>> {
+        val data = mutableListOf<Pair<MarsRoverPhoto, Boolean>>()
+        for (i in photos) {
+            data.add(Pair(i.mapToMarsRoverPhoto(), false))
+        }
+
+        val roverInfo = with(photos[0].rover) {
+            "Rover: $name (id: $id)\nLaunch date: $launch_date\nLanding date: $landing_date\nStatus: $status"
+        }
+        data.add(0, Pair(MarsRoverPhoto(0, roverInfo), false))
+
+        return data
+    }
+
+    private fun showMessage(message: String) {
+        setLayoutElementsVisibility(
+            progressBarVisibility = false,
+            chipsVisibility = true,
+            recyclerViewVisibility = false,
+            appBarVisibility = false,
+            textViewVisibility = true
+        )
         val marsRoverTextView = binding.marsRoverTextView
         marsRoverTextView.visibility = View.VISIBLE
         marsRoverTextView.text = message
     }
-
 }

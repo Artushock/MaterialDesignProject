@@ -58,4 +58,11 @@
     <string name="_relative_velocity_km_sec">Relative velocity (km/sec):</string>
     <string name="_previous">Previous</string>
     <string name="_next">Next</string>
+    <string name="_drop_up_button">Drop up button</string>
+    <string name="_drop_down_button">Drop down button</string>
+    <string name="_favorite_button">Favorite button</string>
+    <string name="_delete_button">Delete button</string>
+    <string name="_hamburger_button">Hamburger button</string>
+    <string name="_app_version">version 1.0.0.</string>
+    <string name="_created_by_artushock">Created by Artushock</string>
 </resources>

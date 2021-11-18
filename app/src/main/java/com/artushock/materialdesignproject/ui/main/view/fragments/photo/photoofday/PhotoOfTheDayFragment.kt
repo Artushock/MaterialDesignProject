@@ -2,6 +2,7 @@ package com.artushock.materialdesignproject.ui.main.view.fragments.photo.photoof
 
 import android.animation.ObjectAnimator
 import android.content.Intent
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -229,8 +230,14 @@ class PhotoOfTheDayFragment : Fragment() {
         val d = if (description.isNullOrEmpty()) "No description" else description
 
         with(binding.bottomSheetInfo) {
+            infoTitle.typeface = Typeface.createFromAsset(requireActivity().assets, "RoadRage-Regular.ttf")
+            infoTitle.textSize = 40f
             infoTitle.text = t
+
+            infoContent.typeface = Typeface.createFromAsset(requireActivity().assets, "NanumGothic-Regular.ttf")
+            infoContent.textSize = 14f
             infoContent.text = d
         }
+
     }
 }
